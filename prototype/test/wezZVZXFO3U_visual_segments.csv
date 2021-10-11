@@ -1,0 +1,40 @@
+visual_seg_id,start,start_frame,end,end_frame,clip_score,matched_audio_seg_ids,matches_explanations
+1,0,0,14,431,0.0,set(),set()
+2,14,431,18,559,3.0128175616264343,"{4, 5}","{'5:little extra foil', '4:pan line foil forming pan'}"
+3,18,559,19,590,0.0,set(),set()
+4,19,590,25,754,0.8226267695426941,{5},{'5:little extra foil'}
+5,25,754,30,906,0.0,set(),set()
+6,30,906,34,1040,0.2624971866607666,{9},{'9:round cheesecake color pan'}
+7,34,1040,38,1155,0.0,set(),set()
+8,38,1155,47,1428,3.310541331768036,{10},{'10:direct temperature shiny pans'}
+9,47,1428,55,1669,0.8035552203655243,"{10, 12}","{'10:direct temperature shiny pans', '12:honey graham'}"
+10,55,1669,58,1760,0.0,set(),set()
+11,58,1760,59,1794,0.2603517174720764,{12},{'12:honey graham'}
+12,59,1794,61,1845,1.427605390548706,{14},{'14:evenly packed crust Cheesecake easier slice use dry measure press crumbs'}
+13,61,1845,62,1876,0.0,set(),set()
+14,62,1876,67,2032,1.46180260181427,{14},{'14:evenly packed crust Cheesecake easier slice use dry measure press crumbs'}
+15,67,2032,69,2095,0.0,set(),set()
+16,69,2095,72,2180,1.347564309835434,{16},{'16:filling start room temperature ingredients'}
+17,72,2180,75,2264,1.1389335095882416,{16},{'16:soften philadelphia cream cheese microwave'}
+18,75,2264,82,2485,0.26087692379951477,{17},{'17:simply unwrap microwave HIGH 15 seconds brick'}
+19,82,2485,92,2777,0.0,set(),set()
+20,92,2777,95,2879,0.807683140039444,{18},{'18:great tip sure batter smooth lump'}
+21,95,2879,98,2966,0.0,set(),set()
+22,98,2966,100,3016,0.8120637834072113,{21},{'21:eggs time'}
+23,100,3016,101,3044,0.0,set(),set()
+24,101,3044,103,3114,0.0,set(),set()
+25,103,3114,104,3149,0.0,set(),set()
+26,104,3149,107,3218,0.0,set(),set()
+27,107,3218,108,3247,0.0,set(),set()
+28,108,3247,111,3350,0.0,set(),set()
+29,111,3350,113,3409,0.0,set(),set()
+30,113,3409,120,3602,0.5591148138046265,{25},{'25:dry texture cheesecake'}
+31,120,3602,122,3682,1.7636196315288544,{25},{'25:dry texture cheesecake'}
+32,122,3682,124,3747,0.0,set(),set()
+33,124,3747,126,3780,0.0,set(),set()
+34,126,3780,129,3875,0.0,set(),set()
+35,129,3875,133,4014,0.0,set(),set()
+36,133,4014,137,4135,0.26361143589019775,{29},{'29:cheesecakes'}
+37,137,4135,143,4306,5.320280134677887,{30},{'30:sour cream pie filling'}
+38,143,4306,147,4431,0.0,set(),set()
+39,147,4431,158,4749,1.440923124551773,{30},{'30:sour cream pie filling'}
