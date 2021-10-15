@@ -20,12 +20,12 @@
 
         <div id="visual">
             <h2>Visual</h2>
-            {% for visual_seg in all_visual_segs %}
+            {% for seg_id, visual_seg in visual_segs_dict.items %}
                 {% if visual_seg.clip_score == 0 %}
-                    <button id="v{{visual_seg.seg_id}}" class="seekTimeLink" style="background-color:rgb(255, 145, 145)">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
+                    <button id="v{{seg_id}}" class="seekTimeLink" style="background-color:rgb(255, 145, 145)">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
                 {% else %}
-                    <button id="v{{visual_seg.seg_id}}" class="seekTimeLink" title="{{visual_seg.clip_score}}; {{visual_seg.clip_explanations}}">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
-                {% endif %}
+                    <button id="v{{seg_id}}" class="seekTimeLink" related_audio="{{visual_seg.clip_matched_audio_seg_ids}}" clip_explanations="{{visual_seg.clip_explanations}}" start_time="{{visual_seg.start_time}}" end_time="{{visual_seg.end_time}}">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
+                {% endif %}              
             {% endfor %}
             <br>
         </div>
@@ -74,36 +74,26 @@
         
         var seekTimeLinks = document.getElementsByClassName("seekTimeLink");
         for (var i = 0; i < seekTimeLinks.length; i++) {
+
             // click time of each question to jump to video time
             seekTimeLinks.item(i).addEventListener("click", (e) => {
-                start = e.target.innerHTML.split('-')[0]
-                console.log("jump to 1 seconds before " + start);
-                player.seekTo(parseInt(Math.max(start, 0)));
+                var start_time = parseInt(e.target.getAttribute('start_time'))
+                var end_time = parseInt(e.target.getAttribute('end_time'))
+                var audio_ids = e.target.getAttribute('related_audio')
+                player.seekTo(parseInt(Math.max(start_time, 0)));
             });
             
+            // add css attribute hover
             // hover to show matched segments
             seekTimeLinks.item(i).addEventListener("mouseover", (e) => {
-               
-                var matches_info = e.target.title;
-
-                var string_ids = matches_info.substring(
-                    matches_info.indexOf("{") + 1, 
-                    matches_info.lastIndexOf("}")
-                );
-                var strings = string_ids.split(',');
-                var ids = [];
-                for (var string of strings){
-
-                    ids.push(string.replace(/[^0-9]/g,''));
-                }
-
-                for (var id of ids){
-                    var audio_button = document.getElementById("a"+id);
+                var start_time = parseInt(e.target.getAttribute('start_time'))
+                var end_time = parseInt(e.target.getAttribute('end_time'))
+                var audio_ids = e.target.getAttribute('related_audio') 
+                audio_ids = JSON.parse(audio_ids);
+                for (var audio_id of audio_ids) {
+                    var audio_button = document.getElementById("a"+audio_id);
                     audio_button.style = "background-color:green"
                 }
-
-
-                document.getElementById("sentence").innerHTML = matches_info;
 
             });
 
