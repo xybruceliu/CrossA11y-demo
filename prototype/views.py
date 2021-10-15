@@ -16,6 +16,11 @@ def video(request, video_id):
     all_visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
     all_audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
 
+    # preprocess and send data to be rendered
+    # TODO filtered visual and audio segs with video_id
+    # TOOD visual to audio dict (v+id => [a+id])
+    #                       e.g. v9  => [a10, a12]
+
     context = {'video_id': video_id,
                 'all_visual_segs': all_visual_segs,
                 'all_audio_segs': all_audio_segs}
