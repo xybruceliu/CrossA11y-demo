@@ -1,117 +1,130 @@
 <!DOCTYPE html>
-<html>   
+<html>
+  <head>
+    <title>Content Accessibility Diagnosis and Repairment</title>
+  </head>
 
-    <head>
-        <title> Content Accessibility Diagnosis and Repairment </title>
-    </head>
+  <header>
+    <h1>Result</h1>
+  </header>
 
+  <body>
+    <div id="embeded_video">
+      <h2>Video</h2>
+      <iframe
+        id="youtube-video"
+        width="640"
+        height="360"
+        src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      <br />
+    </div>
 
-    <header>
-        <h1>Result</h1>
-    </header>
+    <div id="visual">
+      <h2>Visual</h2>
+      {% for seg_id, visual_seg in visual_segs_dict.items %} {% if
+      visual_seg.clip_score == 0 %}
+      <button
+        id="v{{seg_id}}"
+        class="seekTimeLink"
+        style="background-color: rgb(255, 145, 145)"
+      >
+        {{visual_seg.start_time}}-{{visual_seg.end_time}}
+      </button>
+      {% else %}
+      <button
+        id="v{{seg_id}}"
+        class="seekTimeLink"
+        related_audio="{{visual_seg.clip_matched_audio_seg_ids}}"
+        clip_explanations="{{visual_seg.clip_explanations}}"
+        start_time="{{visual_seg.start_time}}"
+        end_time="{{visual_seg.end_time}}"
+        accessible="{{visual_seg.accessible}}"
+      >
+        {{visual_seg.start_time}}-{{visual_seg.end_time}}
+      </button>
+      {% endif %} {% endfor %}
+      <br />
+    </div>
 
-    <body>
-        <div id="embeded_video">
-            <h2>Video</h2>
-            <iframe id="youtube-video" width="640" height="360" src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <br>
-        </div>
+    <div id="audio">
+      <h2>Audio</h2>
+      {% for audio_seg in all_audio_segs %}
+      <button
+        id="a{{audio_seg.seg_id}}"
+        class="seekTimeLink"
+        title="{{audio_seg.transcript}}"
+      >
+        {{audio_seg.start_time}}-{{audio_seg.end_time}}
+      </button>
+      {% endfor %}
+      <br />
+    </div>
 
+    <p id="sentence"></p>
+  </body>
 
-        <div id="visual">
-            <h2>Visual</h2>
-            {% for seg_id, visual_seg in visual_segs_dict.items %}
-                {% if visual_seg.clip_score == 0 %}
-                    <button id="v{{seg_id}}" class="seekTimeLink" style="background-color:rgb(255, 145, 145)">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
-                {% else %}
-                    <button id="v{{seg_id}}" class="seekTimeLink" related_audio="{{visual_seg.clip_matched_audio_seg_ids}}" clip_explanations="{{visual_seg.clip_explanations}}" start_time="{{visual_seg.start_time}}" end_time="{{visual_seg.end_time}}">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
-                {% endif %}              
-            {% endfor %}
-            <br>
-        </div>
+  <!-- Javascript -->
 
+  <!-- Embed the youtube video, and add even listerners to jump to time -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script type="text/javascript">
+    // interactively control video via visual timestamps
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("youtube-video", {
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+      });
+    }
 
-        <div id="audio">
-            <h2>Audio</h2>
-            {% for audio_seg in all_audio_segs %}
-                <button id="a{{audio_seg.seg_id}}" class="seekTimeLink" title="{{audio_seg.transcript}}">{{audio_seg.start_time}}-{{audio_seg.end_time}}</button>
-            {% endfor %}
-            <br>
-        </div>
+    function onPlayerReady() {
+      console.log("hey Im ready");
+      console.log(player.getDuration());
+    }
 
-        <p id="sentence"></p>
+    function onPlayerStateChange() {
+      console.log("my state changed");
+    }
 
-    </body>
+    var seekTimeLinks = document.getElementsByClassName("seekTimeLink");
+    for (var i = 0; i < seekTimeLinks.length; i++) {
+      // click time of each question to jump to video time
+      seekTimeLinks.item(i).addEventListener("click", (e) => {
+        var start_time = parseInt(e.target.getAttribute("start_time"));
+        var end_time = parseInt(e.target.getAttribute("end_time"));
+        var audio_ids = e.target.getAttribute("related_audio");
+        player.seekTo(parseInt(Math.max(start_time, 0)));
+      });
 
-
-
-    <!-- Javascript -->
-
-    <!-- Embed the youtube video, and add even listerners to jump to time -->
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script type="text/javascript">
-
-        // interactively control video via visual timestamps
-        var player;
-        function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-video', {
-            events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-            }
-        });
+      // add css attribute hover
+      // hover to show matched segments
+      seekTimeLinks.item(i).addEventListener("mouseover", (e) => {
+        var start_time = parseInt(e.target.getAttribute("start_time"));
+        var end_time = parseInt(e.target.getAttribute("end_time"));
+        var audio_ids = e.target.getAttribute("related_audio");
+        audio_ids = JSON.parse(audio_ids);
+        for (var audio_id of audio_ids) {
+          var audio_button = document.getElementById("a" + audio_id);
+          audio_button.style = "background-color:green";
         }
+      });
 
-        function onPlayerReady() {
-            console.log("hey Im ready");
-            console.log(player.getDuration())
-        }
-
-        function onPlayerStateChange() {
-            console.log("my state changed");
-        }
-
-        
-        var seekTimeLinks = document.getElementsByClassName("seekTimeLink");
+      // hover out
+      seekTimeLinks.item(i).addEventListener("mouseout", (e) => {
         for (var i = 0; i < seekTimeLinks.length; i++) {
-
-            // click time of each question to jump to video time
-            seekTimeLinks.item(i).addEventListener("click", (e) => {
-                var start_time = parseInt(e.target.getAttribute('start_time'))
-                var end_time = parseInt(e.target.getAttribute('end_time'))
-                var audio_ids = e.target.getAttribute('related_audio')
-                player.seekTo(parseInt(Math.max(start_time, 0)));
-            });
-            
-            // add css attribute hover
-            // hover to show matched segments
-            seekTimeLinks.item(i).addEventListener("mouseover", (e) => {
-                var start_time = parseInt(e.target.getAttribute('start_time'))
-                var end_time = parseInt(e.target.getAttribute('end_time'))
-                var audio_ids = e.target.getAttribute('related_audio') 
-                audio_ids = JSON.parse(audio_ids);
-                for (var audio_id of audio_ids) {
-                    var audio_button = document.getElementById("a"+audio_id);
-                    audio_button.style = "background-color:green"
-                }
-
-            });
-
-            // hover out
-            seekTimeLinks.item(i).addEventListener("mouseout", (e) => {
-                
-                for (var i = 0; i < seekTimeLinks.length; i++) {
-                    if (seekTimeLinks.item(i).id.includes("a")){
-                        seekTimeLinks.item(i).style = "background-color:";
-                    }
-                }
-
-                document.getElementById("sentence").innerHTML = "";
-
-            });
-
+          if (seekTimeLinks.item(i).id.includes("a")) {
+            seekTimeLinks.item(i).style = "background-color:";
+          }
         }
 
-    </script>
-    
+        document.getElementById("sentence").innerHTML = "";
+      });
+    }
+  </script>
 </html>
