@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Content Accessibility Diagnosis and Repairment</title>
+    <link rel="stylesheet" href="../../static/css/styles.css" />
   </head>
 
   <header>
@@ -25,27 +26,24 @@
 
     <div id="visual">
       <h2>Visual</h2>
-      {% for seg_id, visual_seg in visual_segs_dict.items %} {% if
-      visual_seg.clip_score == 0 %}
-      <button
-        id="v{{seg_id}}"
-        class="seekTimeLink"
-        style="background-color: rgb(255, 145, 145)"
-      >
-        {{visual_seg.start_time}}-{{visual_seg.end_time}}
-      </button>
-      {% else %}
-      <button
-        id="v{{seg_id}}"
-        class="seekTimeLink"
-        related_audio="{{visual_seg.clip_matched_audio_seg_ids}}"
-        clip_explanations="{{visual_seg.clip_explanations}}"
+      {% for seg_id, visual_seg in visual_segs_dict.items %} 
+      {% if visual_seg.clip_score == 0 %}
+      <svg width="{{visual_seg.duration}}" height="8">
+        <rect 
+        class="seekTimeLink" 
+        related_audio="{{visual_seg.clip_matched_audio_seg_ids}}" width="{{visual_seg.duration}}" height="8"
         start_time="{{visual_seg.start_time}}"
         end_time="{{visual_seg.end_time}}"
-        accessible="{{visual_seg.accessible}}"
-      >
-        {{visual_seg.start_time}}-{{visual_seg.end_time}}
-      </button>
+        style="fill:rgb(255, 145, 145);" />
+      </svg>
+      {% else %}
+      <svg width="{{visual_seg.duration}}" height="8">
+        <rect class="seekTimeLink" related_audio="{{visual_seg.clip_matched_audio_seg_ids}}" width="{{visual_seg.duration}}" height="8"
+        start_time="{{visual_seg.start_time}}"
+        end_time="{{visual_seg.end_time}}"
+
+        style="fill:#cfdacf;" />
+      </svg>
       {% endif %} {% endfor %}
       <br />
     </div>
@@ -72,59 +70,60 @@
   <!-- Embed the youtube video, and add even listerners to jump to time -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script type="text/javascript">
-    // interactively control video via visual timestamps
-    var player;
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player("youtube-video", {
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-        },
-      });
-    }
 
-    function onPlayerReady() {
-      console.log("hey Im ready");
-      console.log(player.getDuration());
-    }
-
-    function onPlayerStateChange() {
-      console.log("my state changed");
-    }
-
-    var seekTimeLinks = document.getElementsByClassName("seekTimeLink");
-    for (var i = 0; i < seekTimeLinks.length; i++) {
-      // click time of each question to jump to video time
-      seekTimeLinks.item(i).addEventListener("click", (e) => {
-        var start_time = parseInt(e.target.getAttribute("start_time"));
-        var end_time = parseInt(e.target.getAttribute("end_time"));
-        var audio_ids = e.target.getAttribute("related_audio");
-        player.seekTo(parseInt(Math.max(start_time, 0)));
-      });
-
-      // add css attribute hover
-      // hover to show matched segments
-      seekTimeLinks.item(i).addEventListener("mouseover", (e) => {
-        var start_time = parseInt(e.target.getAttribute("start_time"));
-        var end_time = parseInt(e.target.getAttribute("end_time"));
-        var audio_ids = e.target.getAttribute("related_audio");
-        audio_ids = JSON.parse(audio_ids);
-        for (var audio_id of audio_ids) {
-          var audio_button = document.getElementById("a" + audio_id);
-          audio_button.style = "background-color:green";
+        // interactively control video via visual timestamps
+        var player;
+        function onYouTubeIframeAPIReady() {
+          player = new YT.Player("youtube-video", {
+            events: {
+              onReady: onPlayerReady,
+              onStateChange: onPlayerStateChange,
+            },
+          });
         }
-      });
 
-      // hover out
-      seekTimeLinks.item(i).addEventListener("mouseout", (e) => {
+        function onPlayerReady() {
+          console.log("hey Im ready");
+          console.log(player.getDuration());
+        }
+
+        function onPlayerStateChange() {
+          console.log("my state changed");
+        }
+
+        var seekTimeLinks = document.getElementsByClassName("seekTimeLink");
         for (var i = 0; i < seekTimeLinks.length; i++) {
-          if (seekTimeLinks.item(i).id.includes("a")) {
-            seekTimeLinks.item(i).style = "background-color:";
-          }
-        }
+          // click time of each question to jump to video time
+          seekTimeLinks.item(i).addEventListener("click", (e) => {
+            var start_time = parseInt(e.target.getAttribute("start_time"));
+            var end_time = parseInt(e.target.getAttribute("end_time"));
+            var audio_ids = e.target.getAttribute("related_audio");
+            player.seekTo(parseInt(Math.max(start_time, 0)));
+          });
 
-        document.getElementById("sentence").innerHTML = "";
-      });
-    }
+          // add css attribute hover
+          // hover to show matched segments
+          seekTimeLinks.item(i).addEventListener("mouseover", (e) => {
+            var start_time = parseInt(e.target.getAttribute("start_time"));
+            var end_time = parseInt(e.target.getAttribute("end_time"));
+            var audio_ids = e.target.getAttribute("related_audio");
+            audio_ids = JSON.parse(audio_ids);
+            for (var audio_id of audio_ids) {
+              var audio_button = document.getElementById("a" + audio_id);
+              audio_button.style = "background-color:green";
+            }
+          });
+
+          // hover out
+          seekTimeLinks.item(i).addEventListener("mouseout", (e) => {
+            for (var i = 0; i < seekTimeLinks.length; i++) {
+              if (seekTimeLinks.item(i).id.includes("a")) {
+                seekTimeLinks.item(i).style = "background-color:";
+              }
+            }
+
+            document.getElementById("sentence").innerHTML = "";
+          });
+        }
   </script>
 </html>

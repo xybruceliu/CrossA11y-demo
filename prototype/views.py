@@ -33,7 +33,8 @@ def video(request, video_id):
             'clip_score': seg.clip_score,
             'clip_matched_audio_seg_ids': json.dumps(clip_matched_audio_seg_ids),
             'accessible': accessible,
-            'clip_explanations': seg.clip_explanations
+            'clip_explanations': seg.clip_explanations,
+            'duration': (seg.end_time - seg.start_time) * 5
         }
         visual_segs_dict[seg.seg_id] = d
 
