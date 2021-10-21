@@ -46,6 +46,7 @@ def video(request, video_id):
         'audio_segs_dict': audio_segs_dict,
     }
 
+
     return render(request, 'prototype/video.html', context)
 
 

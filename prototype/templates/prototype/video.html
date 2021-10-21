@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <title>Content Accessibility Diagnosis and Repairment</title>
@@ -71,6 +72,7 @@
   <script src="https://www.youtube.com/iframe_api"></script>
   <script type="text/javascript">
 
+
         // interactively control video via visual timestamps
         var player;
         function onYouTubeIframeAPIReady() {
@@ -93,6 +95,7 @@
 
         var seekTimeLinks = document.getElementsByClassName("seekTimeLink");
         for (var i = 0; i < seekTimeLinks.length; i++) {
+
           // click time of each question to jump to video time
           seekTimeLinks.item(i).addEventListener("click", (e) => {
             var start_time = parseInt(e.target.getAttribute("start_time"));
