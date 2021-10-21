@@ -1,131 +1,132 @@
 <!DOCTYPE html>
-<html>   
 
-    <head>
-        <title> Content Accessibility Diagnosis and Repairment </title>
-    </head>
+<html>
+  <head>
+    <title>Content Accessibility Diagnosis and Repairment</title>
+    <link rel="stylesheet" href="../../static/css/styles.css" />
+  </head>
 
+  <header>
+    <h1>Result</h1>
+  </header>
 
-    <header>
-        <h1>Result</h1>
-    </header>
+  <body>
+    <div id="embeded_video">
+      <h2>Video</h2>
+      <iframe
+        id="youtube-video"
+        width="640"
+        height="360"
+        src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      <br />
+    </div>
 
-    <body>
-        <div id="embeded_video">
-            <h2>Video</h2>
-            <iframe id="youtube-video" width="640" height="360" src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <br>
-        </div>
+    <div id="visual">
+      <h2>Visual</h2>
+      {% for seg_id, visual_seg in visual_segs_dict.items %} 
+      {% if visual_seg.clip_score == 0 %}
+      <svg width="{{visual_seg.duration}}" height="8">
+        <rect 
+        class="seekTimeLink" 
+        related_audio="{{visual_seg.clip_matched_audio_seg_ids}}" width="{{visual_seg.duration}}" height="8"
+        start_time="{{visual_seg.start_time}}"
+        end_time="{{visual_seg.end_time}}"
+        style="fill:rgb(255, 145, 145);" />
+      </svg>
+      {% else %}
+      <svg width="{{visual_seg.duration}}" height="8">
+        <rect class="seekTimeLink" related_audio="{{visual_seg.clip_matched_audio_seg_ids}}" width="{{visual_seg.duration}}" height="8"
+        start_time="{{visual_seg.start_time}}"
+        end_time="{{visual_seg.end_time}}"
 
+        style="fill:#cfdacf;" />
+      </svg>
+      {% endif %} {% endfor %}
+      <br />
+    </div>
 
-        <div id="visual">
-            <h2>Visual</h2>
-            {% for visual_seg in all_visual_segs %}
-                {% if visual_seg.clip_score == 0 %}
-                    <button id="v{{visual_seg.seg_id}}" class="seekTimeLink" style="background-color:rgb(255, 145, 145)">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
-                {% else %}
-                    <button id="v{{visual_seg.seg_id}}" class="seekTimeLink" title="{{visual_seg.clip_score}}; {{visual_seg.clip_explanations}}">{{visual_seg.start_time}}-{{visual_seg.end_time}}</button>
-                {% endif %}
-            {% endfor %}
-            <br>
-        </div>
+    <div id="audio">
+      <h2>Audio</h2>
+      {% for audio_seg in all_audio_segs %}
+      <button
+        id="a{{audio_seg.seg_id}}"
+        class="seekTimeLink"
+        title="{{audio_seg.transcript}}"
+      >
+        {{audio_seg.start_time}}-{{audio_seg.end_time}}
+      </button>
+      {% endfor %}
+      <br />
+    </div>
 
+    <p id="sentence"></p>
+  </body>
 
-        <div id="audio">
-            <h2>Audio</h2>
-            {% for audio_seg in all_audio_segs %}
-                <button id="a{{audio_seg.seg_id}}" class="seekTimeLink" title="{{audio_seg.transcript}}">{{audio_seg.start_time}}-{{audio_seg.end_time}}</button>
-            {% endfor %}
-            <br>
-        </div>
+  <!-- Javascript -->
 
-        <p id="sentence"></p>
+  <!-- Embed the youtube video, and add even listerners to jump to time -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script type="text/javascript">
 
-    </body>
-
-
-
-
-
-    <!-- Javascript -->
-
-    <!-- Embed the youtube video, and add even listerners to jump to time -->
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script type="text/javascript">
 
         // interactively control video via visual timestamps
         var player;
         function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-video', {
+          player = new YT.Player("youtube-video", {
             events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-            }
-        });
+              onReady: onPlayerReady,
+              onStateChange: onPlayerStateChange,
+            },
+          });
         }
 
         function onPlayerReady() {
-            console.log("hey Im ready");
-            console.log(player.getDuration())
+          console.log("hey Im ready");
+          console.log(player.getDuration());
         }
 
         function onPlayerStateChange() {
-            console.log("my state changed");
+          console.log("my state changed");
         }
 
-        
         var seekTimeLinks = document.getElementsByClassName("seekTimeLink");
         for (var i = 0; i < seekTimeLinks.length; i++) {
-            // click time of each question to jump to video time
-            seekTimeLinks.item(i).addEventListener("click", (e) => {
-                start = e.target.innerHTML.split('-')[0]
-                console.log("jump to 1 seconds before " + start);
-                player.seekTo(parseInt(Math.max(start, 0)));
-            });
-            
 
-            // DELETE 
-            // hover to show matched segments
-            seekTimeLinks.item(i).addEventListener("mouseover", (e) => {
-               
-                var matches_info = e.target.title;
+          // click time of each question to jump to video time
+          seekTimeLinks.item(i).addEventListener("click", (e) => {
+            var start_time = parseInt(e.target.getAttribute("start_time"));
+            var end_time = parseInt(e.target.getAttribute("end_time"));
+            var audio_ids = e.target.getAttribute("related_audio");
+            player.seekTo(parseInt(Math.max(start_time, 0)));
+          });
 
-                var string_ids = matches_info.substring(
-                    matches_info.indexOf("{") + 1, 
-                    matches_info.lastIndexOf("}")
-                );
-                var strings = string_ids.split(',');
-                var ids = [];
-                for (var string of strings){
+          // add css attribute hover
+          // hover to show matched segments
+          seekTimeLinks.item(i).addEventListener("mouseover", (e) => {
+            var start_time = parseInt(e.target.getAttribute("start_time"));
+            var end_time = parseInt(e.target.getAttribute("end_time"));
+            var audio_ids = e.target.getAttribute("related_audio");
+            audio_ids = JSON.parse(audio_ids);
+            for (var audio_id of audio_ids) {
+              var audio_button = document.getElementById("a" + audio_id);
+              audio_button.style = "background-color:green";
+            }
+          });
 
-                    ids.push(string.replace(/[^0-9]/g,''));
-                }
+          // hover out
+          seekTimeLinks.item(i).addEventListener("mouseout", (e) => {
+            for (var i = 0; i < seekTimeLinks.length; i++) {
+              if (seekTimeLinks.item(i).id.includes("a")) {
+                seekTimeLinks.item(i).style = "background-color:";
+              }
+            }
 
-                for (var id of ids){
-                    var audio_button = document.getElementById("a"+id);
-                    audio_button.style = "background-color:green"
-                }
-
-
-                document.getElementById("sentence").innerHTML = matches_info;
-
-            });
-
-            // hover out
-            seekTimeLinks.item(i).addEventListener("mouseout", (e) => {
-                
-                for (var i = 0; i < seekTimeLinks.length; i++) {
-                    if (seekTimeLinks.item(i).id.includes("a")){
-                        seekTimeLinks.item(i).style = "background-color:";
-                    }
-                }
-
-                document.getElementById("sentence").innerHTML = "";
-
-            });
-
+            document.getElementById("sentence").innerHTML = "";
+          });
         }
-
-    </script>
-    
+  </script>
 </html>
