@@ -12,40 +12,63 @@ def index(request):
     return HttpResponse("Hello, world.")
 
 # another view video_detail
-# def video(request, video_id)
 def video(request, video_id):
     all_visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
     all_audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
 
     visual_segs_dict = {}  # key: seg id, value: dict of fields
     audio_segs_dict = {}
+
     video_seg_ids = [seg.seg_id for seg in all_visual_segs]
     video_seg_ids.sort()
-    
+
+    # get video length 
+    video_length = 0
+    for seg in all_visual_segs:
+        duration = seg.end_time
+        if duration > video_length:
+            video_length = duration
+
+    # construct a VISUAL seg dictionary {id -> d}
     for seg in all_visual_segs:
         clip_matched_audio_seg_ids = get_audio_seg_set(seg.clip_matched_audio_seg_ids)
-        accessible = 0 
-        if clip_matched_audio_seg_ids:
-            accessible = 1
+        accessible = 1 if clip_matched_audio_seg_ids else 0
         d = {
+            'seg_id': seg.seg_id,
             'start_time': seg.start_time,
             'end_time': seg.end_time,
             'clip_score': seg.clip_score,
             'clip_matched_audio_seg_ids': json.dumps(clip_matched_audio_seg_ids),
             'accessible': accessible,
             'clip_explanations': seg.clip_explanations,
-            'duration': (seg.end_time - seg.start_time) * 5
+            'duration': seg.end_time - seg.start_time,
+            'normalized_duration': 100*(seg.end_time - seg.start_time)/video_length,
         }
         visual_segs_dict[seg.seg_id] = d
+
+    # construct a AUDIO seg dict
+    for seg in all_audio_segs:
+        accessible = 0 if (seg.transcript == "NON-SPEECH") else 1
+        d = {
+            'seg_id': seg.seg_id,
+            'start_time': seg.start_time,
+            'end_time': seg.end_time,
+            'transcript': seg.transcript,
+            'clip_score': seg.clip_score,
+            'accessible': accessible,
+            'clip_explanations': seg.clip_explanations,
+            'duration': seg.end_time - seg.start_time,
+            'normalized_duration': 100*(seg.end_time - seg.start_time)/video_length,
+        }
+        audio_segs_dict[seg.seg_id] = d
+
 
     context = {
         'video_id': video_id,
         'video_seg_ids': video_seg_ids,
         'visual_segs_dict': visual_segs_dict,
-        'all_audio_segs': all_audio_segs,
-        'audio_segs_dict': audio_segs_dict,
+        'audio_segs_dict': audio_segs_dict
     }
-
 
     return render(request, 'prototype/video.html', context)
 
@@ -63,6 +86,8 @@ def get_audio_seg_set(clip_matched_audio_seg_ids):
         clip_matched_audio_seg_ids = clip_matched_audio_seg_ids.strip('{}')
         clip_matched_audio_seg_ids = clip_matched_audio_seg_ids.split(', ')
     return clip_matched_audio_seg_ids
+
+
 
 # Process and add a video's info to db
 def add(request, video_id):
