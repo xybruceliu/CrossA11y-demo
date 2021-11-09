@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-import numpy
+import numpy as np
 import pandas as pd
 import json
 
@@ -92,29 +92,33 @@ def get_audio_seg_set(clip_matched_audio_seg_ids):
 # Process and add a video's info to db
 def add(request, video_id):
 
-    # wezZVZXFO3U
+    # get df visual seg and audio seg to find start and end times
+    df_visual_seg = pd.read_csv("prototype/test/"+video_id+"_visual_segments.csv")
+    df_audio_seg = pd.read_csv("prototype/test/"+video_id+"_audio_segments.csv")
 
-    df_visual_segs = pd.read_csv(
-        "prototype/test/" + video_id + "_visual_segments.csv")
-    df_audio_segs = pd.read_csv(
-        "prototype/test/" + video_id + "_audio_segments.csv")
+    df_vt_matches = pd.read_csv("prototype/test/" + video_id + "_combined_vt_scores_matrix_filtered.csv", index_col=0)
+    arr_vt_matches = df_vt_matches.to_numpy()
+
 
     # add all visual segs
-    for index, row in df_visual_segs.iterrows():
+    for i, row in df_visual_seg.iterrows():
         VisualSeg.objects.create(video_id=video_id,
                                  seg_id=row["visual_seg_id"],
                                  start_time=row["start"],
                                  end_time=row["end"],
-                                 clip_score=row["clip_score"],
-                                 clip_matched_audio_seg_ids=row["matched_audio_seg_ids"],
-                                 clip_explanations=row["matches_explanations"])
+                                 importance = 1,
+                                 vt_scores = json.dumps(list(arr_vt_matches[i,:])),
+                                 score = np.sum(arr_vt_matches[i,:]))
 
-    for index, row in df_audio_segs.iterrows():
+
+    # add all audio segs
+    for i, row in df_audio_seg.iterrows():
         AudioSeg.objects.create(video_id=video_id,
                                 seg_id=row["audio_seg_id"],
-                                start_time=int(row["start"]),
-                                end_time=int(row["end"]),
-                                transcript=row["subject"],
-                                clip_score=-1)
+                                start_time=row["start"],
+                                end_time=row["end"],
+                                importance = 1,
+                                tv_scores = json.dumps(list(arr_vt_matches[:,i])),
+                                score = np.sum(arr_vt_matches[:,i]))
 
     return HttpResponse(video_id + " successfully added!")

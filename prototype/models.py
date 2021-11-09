@@ -8,12 +8,12 @@ class VisualSeg(models.Model):
     start_time = models.IntegerField()
     end_time = models.IntegerField()
 
-    clip_score = models.FloatField()
-    clip_matched_audio_seg_ids = models.TextField()
-    clip_explanations = models.TextField()
+    importance = models.FloatField()
+    vt_scores = models.CharField(max_length=1000) # list of visual-text matching scores for all text segments w.r.t. to this visual segment
+    score = models.FloatField()
 
     def is_grounded(self):
-        return self.clip_score > 0
+        return self.score > 0
 
     def toString(self):
         return self.video_id + "&" + str(self.seg_id)
@@ -30,12 +30,12 @@ class AudioSeg(models.Model):
     end_time = models.IntegerField()
     transcript = models.TextField()
 
-    clip_score = models.FloatField()
-    clip_matched_visual_seg_ids = models.TextField()
-    clip_explanations = models.TextField()
-
+    importance = models.FloatField()
+    tv_scores = models.CharField(max_length=1000) # list of visual-text matching scores for all visual segments w.r.t. to this audio segment (text)
+    score = models.FloatField()
+    
     def is_grounded(self):
-        return self.clip_score > 0
+        return self.score > 0
 
     def toString(self):
         return self.video_id + "&" + str(self.seg_id)
