@@ -62,7 +62,6 @@ def video(request, video_id):
         }
         audio_segs_dict[seg.seg_id] = d
 
-
     context = {
         'video_id': video_id,
         'video_seg_ids': video_seg_ids,
@@ -99,8 +98,9 @@ def add(request, video_id):
     df_vt_matches = pd.read_csv("prototype/test/" + video_id + "_combined_vt_scores_matrix_filtered.csv", index_col=0)
     arr_vt_matches = df_vt_matches.to_numpy()
 
-
     # add all visual segs
+    vt_all_scores = np.sum(arr_vt_matches, axis=1)
+    vt_norm_socres = normalize(vt_all_scores)
     for i, row in df_visual_seg.iterrows():
         VisualSeg.objects.create(video_id=video_id,
                                  seg_id=row["visual_seg_id"],
@@ -108,10 +108,13 @@ def add(request, video_id):
                                  end_time=row["end"],
                                  importance = 1,
                                  vt_scores = json.dumps(list(arr_vt_matches[i,:])),
-                                 score = np.sum(arr_vt_matches[i,:]))
-
+                                 score = vt_all_scores[i],
+                                 norm_score = vt_norm_socres[i]
+                                 )
 
     # add all audio segs
+    tv_all_scores = np.sum(arr_vt_matches, axis=0)
+    tv_norm_socres = normalize(tv_all_scores)
     for i, row in df_audio_seg.iterrows():
         AudioSeg.objects.create(video_id=video_id,
                                 seg_id=row["audio_seg_id"],
@@ -119,6 +122,14 @@ def add(request, video_id):
                                 end_time=row["end"],
                                 importance = 1,
                                 tv_scores = json.dumps(list(arr_vt_matches[:,i])),
-                                score = np.sum(arr_vt_matches[:,i]))
+                                score = tv_all_scores[i],
+                                norm_score = tv_norm_socres[i]
+                                )
 
     return HttpResponse(video_id + " successfully added!")
+
+
+
+# Helper: normalizaiton
+def normalize(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data))
