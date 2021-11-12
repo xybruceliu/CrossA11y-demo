@@ -13,60 +13,17 @@ def index(request):
 
 # another view video_detail
 def video(request, video_id):
-    all_visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
-    all_audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
+    visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
+    audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
 
-    visual_segs_dict = {}  # key: seg id, value: dict of fields
-    audio_segs_dict = {}
-
-    video_seg_ids = [seg.seg_id for seg in all_visual_segs]
-    video_seg_ids.sort()
-
-    # get video length 
-    video_length = 0
-    for seg in all_visual_segs:
-        duration = seg.end_time
-        if duration > video_length:
-            video_length = duration
-
-    # construct a VISUAL seg dictionary {id -> d}
-    for seg in all_visual_segs:
-        clip_matched_audio_seg_ids = get_audio_seg_set(seg.clip_matched_audio_seg_ids)
-        accessible = 1 if clip_matched_audio_seg_ids else 0
-        d = {
-            'seg_id': seg.seg_id,
-            'start_time': seg.start_time,
-            'end_time': seg.end_time,
-            'clip_score': seg.clip_score,
-            'clip_matched_audio_seg_ids': json.dumps(clip_matched_audio_seg_ids),
-            'accessible': accessible,
-            'clip_explanations': seg.clip_explanations,
-            'duration': seg.end_time - seg.start_time,
-            'normalized_duration': 100*(seg.end_time - seg.start_time)/video_length,
-        }
-        visual_segs_dict[seg.seg_id] = d
-
-    # construct a AUDIO seg dict
-    for seg in all_audio_segs:
-        accessible = 0 if (seg.transcript == "NON-SPEECH") else 1
-        d = {
-            'seg_id': seg.seg_id,
-            'start_time': seg.start_time,
-            'end_time': seg.end_time,
-            'transcript': seg.transcript,
-            'clip_score': seg.clip_score,
-            'accessible': accessible,
-            'clip_explanations': seg.clip_explanations,
-            'duration': seg.end_time - seg.start_time,
-            'normalized_duration': 100*(seg.end_time - seg.start_time)/video_length,
-        }
-        audio_segs_dict[seg.seg_id] = d
+    transcript_list = [audio_seg.transcript for audio_seg in audio_segs]
+    transcript = ". ".join(transcript_list)
 
     context = {
         'video_id': video_id,
-        'video_seg_ids': video_seg_ids,
-        'visual_segs_dict': visual_segs_dict,
-        'audio_segs_dict': audio_segs_dict
+        'visual_segs': visual_segs,
+        'audio_segs': audio_segs, 
+        'transcript': transcript
     }
 
     return render(request, 'prototype/video.html', context)
@@ -75,17 +32,6 @@ def video(request, video_id):
 # get video detail
 def video_detail(request, video_id):
     pass
-# Process and add a video's info to db
-
-# Get seg set from seg set string
-def get_audio_seg_set(clip_matched_audio_seg_ids):
-    if clip_matched_audio_seg_ids == 'set()':
-        return []
-    else:
-        clip_matched_audio_seg_ids = clip_matched_audio_seg_ids.strip('{}')
-        clip_matched_audio_seg_ids = clip_matched_audio_seg_ids.split(', ')
-    return clip_matched_audio_seg_ids
-
 
 
 # Process and add a video's info to db
@@ -98,6 +44,12 @@ def add(request, video_id):
     df_vt_matches = pd.read_csv("prototype/test/" + video_id + "_combined_vt_scores_matrix_filtered.csv", index_col=0)
     arr_vt_matches = df_vt_matches.to_numpy()
 
+    df_va_matches = pd.read_csv("prototype/test/" + video_id + "_mmv_va_scores_matrix_filtered.csv", index_col=0)
+    arr_va_matches = df_va_matches.to_numpy()
+
+    # get video length to compute % of segment
+    video_length = max(np.max(df_visual_seg["end"]), np.max(df_audio_seg["end"]))
+
     # add all visual segs
     vt_all_scores = np.sum(arr_vt_matches, axis=1)
     vt_norm_socres = normalize(vt_all_scores)
@@ -106,25 +58,50 @@ def add(request, video_id):
                                  seg_id=row["visual_seg_id"],
                                  start_time=row["start"],
                                  end_time=row["end"],
+                                 length = row["end"]-row["start"],
+                                 norm_length = 100*(row["end"]-row["start"])/video_length,
                                  importance = 1,
-                                 vt_scores = json.dumps(list(arr_vt_matches[i,:])),
+                                 match_scores = json.dumps(list(arr_vt_matches[i,:])),
                                  score = vt_all_scores[i],
                                  norm_score = vt_norm_socres[i]
                                  )
 
     # add all audio segs
-    tv_all_scores = np.sum(arr_vt_matches, axis=0)
-    tv_norm_socres = normalize(tv_all_scores)
+    
+    va_all_scores = np.sum(arr_va_matches, axis=0)
+    va_norm_socres = normalize(va_all_scores)
     for i, row in df_audio_seg.iterrows():
-        AudioSeg.objects.create(video_id=video_id,
-                                seg_id=row["audio_seg_id"],
-                                start_time=row["start"],
-                                end_time=row["end"],
-                                importance = 1,
-                                tv_scores = json.dumps(list(arr_vt_matches[:,i])),
-                                score = tv_all_scores[i],
-                                norm_score = tv_norm_socres[i]
-                                )
+
+        # if it's non-speech, use va score to see how much does the sound makes sense
+        if (row["subject"] == "NON-SPEECH"):
+            AudioSeg.objects.create(video_id=video_id,
+                                    seg_id=row["audio_seg_id"],
+                                    start_time=row["start"],
+                                    end_time=row["end"],
+                                    length = row["end"]-row["start"],
+                                    norm_length = 100*(row["end"]-row["start"])/video_length,
+                                    importance = 1,
+                                    match_scores = json.dumps(list(arr_vt_matches[:,i])),
+                                    score = va_all_scores[i],
+                                    norm_score = va_norm_socres[i],
+                                    transcript = row["subject"]
+                                    )
+                
+        # if has speech, give weight 1
+        else:
+            AudioSeg.objects.create(video_id=video_id,
+                                    seg_id=row["audio_seg_id"],
+                                    start_time=row["start"],
+                                    end_time=row["end"],
+                                    length = row["end"]-row["start"],
+                                    norm_length = 100*(row["end"]-row["start"])/video_length,
+                                    importance = 1,
+                                    match_scores = json.dumps(list(arr_vt_matches[:,i])),
+                                    score = va_all_scores[i],
+                                    norm_score = 1,
+                                    transcript = row["subject"]
+                                    )
+            
 
     return HttpResponse(video_id + " successfully added!")
 

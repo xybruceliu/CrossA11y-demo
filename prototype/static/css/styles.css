@@ -1,5 +1,38 @@
-.seekTimeLink:hover {
-  opacity: 0.5;
+/* 
+gray #999999
+red #ff3b30 	rgb(255, 59, 48)
+green #4cd964 rgb(76, 217, 100)
+blue #007aff 	rgb(0, 122, 255)
+*/
+
+
+.v-timeline-svg:hover {
+  transform: scale(1.2);
   cursor: pointer;
 }
 
+.a-timeline-svg:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+#vl-parent {
+  position: relative; 
+  left: 0%;
+}
+
+#vl {
+  position: absolute; 
+  width: 2px; 
+  height: 5vh; 
+  background-color: rgb(171, 171, 171); 
+  z-index: auto;
+}
+
+.transcript:hover {
+  cursor: pointer;
+}
+
+.problem-non-speech {
+  cursor: pointer;
+}
