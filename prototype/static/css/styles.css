@@ -29,10 +29,14 @@ blue #007aff 	rgb(0, 122, 255)
   z-index: auto;
 }
 
-.transcript:hover {
+.word:hover {
   cursor: pointer;
 }
 
 .problem-non-speech {
+  cursor: pointer;
+}
+
+.card-header:hover {
   cursor: pointer;
 }

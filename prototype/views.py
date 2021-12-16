@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import json
 
-from .models import VisualSeg, AudioSeg
+from .models import VisualSeg, AudioSeg, Word, Problem, DescriptionVisual, DescriptionAudio
 
 
 def index(request):
@@ -15,6 +15,8 @@ def index(request):
 def video(request, video_id):
     visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
     audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
+    words = Word.objects.all().filter(video_id=video_id)
+    problems = Problem.objects.all().filter(video_id=video_id)
 
     transcript_list = [audio_seg.transcript for audio_seg in audio_segs]
     transcript = ". ".join(transcript_list)
@@ -23,6 +25,8 @@ def video(request, video_id):
         'video_id': video_id,
         'visual_segs': visual_segs,
         'audio_segs': audio_segs, 
+        'words': words,
+        'problems': problems,
         'transcript': transcript
     }
 
@@ -40,6 +44,7 @@ def add(request, video_id):
     # get df visual seg and audio seg to find start and end times
     df_visual_seg = pd.read_csv("prototype/test/"+video_id+"_visual_segments.csv")
     df_audio_seg = pd.read_csv("prototype/test/"+video_id+"_audio_segments.csv")
+    df_words = pd.read_csv("prototype/test/"+video_id+"_words.csv")
 
     df_vt_matches = pd.read_csv("prototype/test/" + video_id + "_combined_vt_scores_matrix_filtered.csv", index_col=0)
     arr_vt_matches = df_vt_matches.to_numpy()
@@ -49,6 +54,7 @@ def add(request, video_id):
 
     # get video length to compute % of segment
     video_length = max(np.max(df_visual_seg["end"]), np.max(df_audio_seg["end"]))
+
 
     # add all visual segs
     vt_all_scores = np.sum(arr_vt_matches, axis=1)
@@ -67,7 +73,6 @@ def add(request, video_id):
                                  )
 
     # add all audio segs
-    
     va_all_scores = np.sum(arr_va_matches, axis=0)
     va_norm_socres = normalize(va_all_scores)
     for i, row in df_audio_seg.iterrows():
@@ -102,6 +107,55 @@ def add(request, video_id):
                                     transcript = row["subject"]
                                     )
             
+
+
+    # add all words
+    for i, row in df_words.iterrows():
+        Word.objects.create(video_id=video_id,
+                            visual_seg_id=row["visual_seg_id"],
+                            audio_seg_id=row["audio_seg_id"],
+                            start_time=row["start"],
+                            end_time=row["end"],
+                            length=row["length"],
+                            word=row["word"]
+                            )
+
+
+    # add all problems
+    visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
+    audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
+
+    for visual_seg in visual_segs:
+        if visual_seg.norm_score < 0.25:
+            Problem.objects.create(
+                video_id = video_id,
+                problem_description = "Needs a description of the visual.",
+                visual_seg_id = visual_seg.seg_id,
+                audio_seg_id = -1,
+                start_time = visual_seg.start_time,
+                end_time = visual_seg.end_time,
+                length = visual_seg.length,
+                describe_visual = True,
+                describe_audio = False,
+                is_ignored = False,
+                is_fixed = False
+            )
+    
+    for audio_seg in audio_segs:
+        if audio_seg.norm_score < 0.25:
+            Problem.objects.create(
+                video_id = video_id,
+                problem_description = "Needs a description of the audio.",
+                visual_seg_id = -1,
+                audio_seg_id = audio_seg.seg_id,
+                start_time = audio_seg.start_time,
+                end_time = audio_seg.end_time,
+                length = audio_seg.length,
+                describe_visual = False,
+                describe_audio = True,
+                is_ignored = False,
+                is_fixed = False
+            )
 
     return HttpResponse(video_id + " successfully added!")
 
