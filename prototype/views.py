@@ -42,14 +42,14 @@ def video_detail(request, video_id):
 def add(request, video_id):
 
     # get df visual seg and audio seg to find start and end times
-    df_visual_seg = pd.read_csv("prototype/test/"+video_id+"_visual_segments.csv")
-    df_audio_seg = pd.read_csv("prototype/test/"+video_id+"_audio_segments.csv")
-    df_words = pd.read_csv("prototype/test/"+video_id+"_words.csv")
+    df_visual_seg = pd.read_csv("prototype/static/test/"+video_id+"_visual_segments.csv")
+    df_audio_seg = pd.read_csv("prototype/static/test/"+video_id+"_audio_segments.csv")
+    df_words = pd.read_csv("prototype/static/test/"+video_id+"_words.csv")
 
-    df_vt_matches = pd.read_csv("prototype/test/" + video_id + "_combined_vt_scores_matrix_filtered.csv", index_col=0)
+    df_vt_matches = pd.read_csv("prototype/static/test/" + video_id + "_combined_vt_scores_matrix_filtered.csv", index_col=0)
     arr_vt_matches = df_vt_matches.to_numpy()
 
-    df_va_matches = pd.read_csv("prototype/test/" + video_id + "_mmv_va_scores_matrix_filtered.csv", index_col=0)
+    df_va_matches = pd.read_csv("prototype/static/test/" + video_id + "_mmv_va_scores_matrix_filtered.csv", index_col=0)
     arr_va_matches = df_va_matches.to_numpy()
 
     # get video length to compute % of segment
