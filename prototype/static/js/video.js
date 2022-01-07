@@ -19,7 +19,7 @@ function onPlayerStateChange() {
     console.log("my state changed");
 } 
 
-
+var SPEAKING = false;
 // give a timestamp, check which word it is at and return the word span
 function time2Word(time){
     // add highlight
@@ -60,11 +60,17 @@ function time2Word(time){
         var start_time =describe_visual_node.getAttribute("start_time");
         var end_time = describe_visual_node.getAttribute("end_time");
 
-        if ((time > start_time) && (time <= (parseFloat(start_time) + 0.1))){
+        if ((time > start_time) && (time <= (parseFloat(start_time) + 0.1)) && (SPEAKING==false)){
+            SPEAKING = true;
+            player.pauseVideo();
             var msg = new SpeechSynthesisUtterance();
             msg.text = describe_visual_node.getAttribute("description");
             console.log(msg.text)
             window.speechSynthesis.speak(msg);
+            msg.onend = function(event){
+                player.playVideo();
+                SPEARKING = false;
+            }
         }
     }
 
@@ -433,7 +439,7 @@ for (var i = 0; i < describe_visual_buttons.length; i++) {
 
         // determine if inline or not
         // placeholder for now
-        var type = "IN"
+        var type = "EX"
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/prototype/"+video_id+"/"+seg_id+"/describe_visual/", true);
