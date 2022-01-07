@@ -7,6 +7,8 @@ import json
 
 from .models import VisualSeg, AudioSeg, Word, Problem, DescriptionVisual, DescriptionAudio
 
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 
 def index(request):
     return HttpResponse("Hello, world.")
@@ -159,7 +161,81 @@ def add(request, video_id):
 
     return HttpResponse(video_id + " successfully added!")
 
+ 
+# Repair Accessibility Issue Describe Audio
+@csrf_exempt
+def describe_audio(request, video_id, seg_id):
+    if request.method == 'POST':
 
+        data=json.loads(request.body)
+
+
+        if DescriptionAudio.objects.all().filter(video_id=video_id, seg_id=seg_id).exists():
+            # at least one object satisfying query exists
+            DescriptionAudio.objects.all().filter(video_id=video_id, seg_id=seg_id).update(
+                    video_id = data["video_id"],
+                    seg_id = data["seg_id"],
+                    start_time = data["start_time"],
+                    end_time = data["end_time"],
+                    length = data["length"],
+                    description = data["description"]
+                )
+            
+            return HttpResponse("describe audio added!")
+
+        else: 
+            DescriptionAudio.objects.create(
+                    video_id = data["video_id"],
+                    seg_id = data["seg_id"],
+                    start_time = data["start_time"],
+                    end_time = data["end_time"],
+                    length = data["length"],
+                    description = data["description"],
+                )
+            
+            return HttpResponse("describe audio added!")
+
+    else:
+        return HttpResponse("describe audio testing")
+
+
+# Repair Accessibility Issue Describe Visual
+@csrf_exempt
+def describe_visual(request, video_id, seg_id):
+    if request.method == 'POST':
+
+        data=json.loads(request.body)
+
+
+        if DescriptionVisual.objects.all().filter(video_id=video_id, seg_id=seg_id).exists():
+            # at least one object satisfying query exists
+            DescriptionVisual.objects.all().filter(video_id=video_id, seg_id=seg_id).update(
+                    video_id = data["video_id"],
+                    seg_id = data["seg_id"],
+                    start_time = data["start_time"],
+                    end_time = data["end_time"],
+                    length = data["length"],
+                    type = data["type"],
+                    description = data["description"]
+                )
+            
+            return HttpResponse("describe visual added!")
+
+        else: 
+            DescriptionVisual.objects.create(
+                    video_id = data["video_id"],
+                    seg_id = data["seg_id"],
+                    start_time = data["start_time"],
+                    end_time = data["end_time"],
+                    length = data["length"],
+                    type = data["type"],
+                    description = data["description"],
+                )
+            
+            return HttpResponse("describe visual added!")
+
+    else:
+        return HttpResponse("describe visual testing")
 
 # Helper: normalizaiton
 def normalize(data):

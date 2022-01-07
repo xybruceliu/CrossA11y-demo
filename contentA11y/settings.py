@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'xingyuliu.pythonanywhere.com',
+    '127.0.0.1',
 ]
 
 

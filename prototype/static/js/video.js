@@ -22,11 +22,13 @@ function onPlayerStateChange() {
 
 // give a timestamp, check which word it is at and return the word span
 function time2Word(time){
+    // add highlight
     var words = document.getElementsByClassName("word");
     for (var i = 0; i < words.length; i++) {
         var word = words[i];
         var start_time = words[i].getAttribute("start_time");
         var end_time = words[i].getAttribute("end_time");
+
         if ((time >= start_time) && (time <= end_time)){
             word.style.borderBottom = "5px solid #ffc107";
         }
@@ -34,6 +36,38 @@ function time2Word(time){
             word.style.borderBottom = "";
         }
     }
+
+    // preview captions
+    var describe_audio_nodes = document.getElementsByClassName("describe_audio_node");
+    for (var i = 0; i < describe_audio_nodes.length; i++){
+        var describe_audio_node = describe_audio_nodes[i];
+        var start_time =describe_audio_node.getAttribute("start_time");
+        var end_time = describe_audio_node.getAttribute("end_time");
+
+        var preview_captions = document.getElementById("preview-captions");
+        if ((time >= start_time) && (time <= end_time)){
+            preview_captions.innerHTML = describe_audio_node.getAttribute("description");
+        }
+        else{
+            preview_captions.innerHTML = '';
+        }
+    }
+
+    // preview AD
+    var describe_visual_nodes = document.getElementsByClassName("describe_visual_node");
+    for (var i = 0; i < describe_visual_nodes.length; i++){
+        var describe_visual_node = describe_visual_nodes[i];
+        var start_time =describe_visual_node.getAttribute("start_time");
+        var end_time = describe_visual_node.getAttribute("end_time");
+
+        if ((time > start_time) && (time <= (parseFloat(start_time) + 0.1))){
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = describe_visual_node.getAttribute("description");
+            console.log(msg.text)
+            window.speechSynthesis.speak(msg);
+        }
+    }
+
 }
 
 
@@ -68,9 +102,6 @@ function gradient_color(val, c1, c2){
     color_str = "rgb(" + color[0].toString() + "," + color[1].toString() + "," + color[2].toString() + ")"
     return color_str
 }
-
-
-
 
 
 
@@ -315,5 +346,132 @@ for (var i = 0; i < problem_cards.length; i++) {
 
 
 
+// REPAIRING ACCESSIBILITY ISSUES 
 
-// REPAIRING ACCESSIBILITY ISSUES
+// Add to describe AUDIO db
+var describe_audio_buttons = document.getElementsByClassName("describe-audio-submit");
+for (var i = 0; i < describe_audio_buttons.length; i++) {
+    // click to add a description
+    describe_audio_buttons.item(i).addEventListener("click", (e) => {
+
+        // add to db 
+        var video_id = e.target.getAttribute("video_id");
+        var seg_id = e.target.getAttribute("seg_id");
+        var start_time = e.target.getAttribute("start_time");
+        var end_time = e.target.getAttribute("end_time");
+        var length = e.target.getAttribute("length");
+        var description = document.getElementById("describe-audio-form-"+seg_id).value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/"+video_id+"/"+seg_id+"/describe_audio/", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            video_id: video_id,
+            seg_id: seg_id,
+            start_time: start_time,
+            end_time: end_time,
+            length: length,
+            description: description
+        }));
+        
+        // add to description timeline interface
+        var words_div = document.getElementById("description-div");
+        var word_node = words_div.querySelectorAll('[start_time="'+start_time+'"], [end_time="'+end_time+'"]')[0]
+
+        // if description already added
+        if (words_div.querySelectorAll('[seg_id="'+"a"+seg_id+'"]').length == 0){
+            var description_node = document.createElement('div');
+            description_node.classList.add("badge");
+            description_node.classList.add("bg-secondary");
+            description_node.classList.add("describe_audio_node")
+            description_node.setAttribute("seg_id", "a"+seg_id)
+            description_node.setAttribute("start_time", start_time)
+            description_node.setAttribute("end_time", end_time)
+            description_node.setAttribute("description", description)
+            description_node.innerHTML = "[A] " + description;
+            word_node.parentNode.insertBefore(description_node, word_node);
+        }
+
+        else{
+            var description_node = words_div.querySelectorAll('[seg_id="'+"a"+seg_id+'"]')[0]
+            description_node.setAttribute("description", description)
+            description_node.innerHTML = "[A] " + description;
+        }
+    });
+}
+
+
+
+function find_closest_word_node(start_time, end_time){
+    var words = document.getElementsByClassName("word");
+    var start_time_diff = 99999;
+    var closest_node;
+    for (var i = 0; i < words.length; i++) {
+        var word_node = words[i];
+        var word_start_time = words[i].getAttribute("start_time");
+        var word_end_time = words[i].getAttribute("end_time");
+        
+        if (Math.abs(start_time-word_start_time) < start_time_diff){
+            start_time_diff = Math.abs(start_time-word_start_time);
+            closest_node = word_node;
+        }
+    }
+    return closest_node;
+}
+
+// Add to describe VISUAL db
+var describe_visual_buttons = document.getElementsByClassName("describe-visual-submit");
+for (var i = 0; i < describe_visual_buttons.length; i++) {
+    // click to add a description
+    describe_visual_buttons.item(i).addEventListener("click", (e) => {
+        var video_id = e.target.getAttribute("video_id");
+        var seg_id = e.target.getAttribute("seg_id");
+        var start_time = e.target.getAttribute("start_time");
+        var end_time = e.target.getAttribute("end_time");
+        var length = e.target.getAttribute("length");
+        var description = document.getElementById("describe-visual-form-"+seg_id).value;
+
+        // determine if inline or not
+        // placeholder for now
+        var type = "IN"
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/"+video_id+"/"+seg_id+"/describe_visual/", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            video_id: video_id,
+            seg_id: seg_id,
+            start_time: start_time,
+            end_time: end_time,
+            length: length,
+            type: type,
+            description: description
+        }));
+
+        // add to description timeline interface
+        var words_div = document.getElementById("description-div");
+        
+        // find the closest word node
+        var word_node = find_closest_word_node(start_time, end_time);
+
+        // if description already added
+        if (words_div.querySelectorAll('[seg_id="'+"v"+seg_id+'"]').length == 0){
+            var description_node = document.createElement('div');
+            description_node.classList.add("badge");
+            description_node.classList.add("bg-secondary");
+            description_node.classList.add("describe_visual_node")
+            description_node.setAttribute("seg_id", "v"+seg_id)
+            description_node.setAttribute("start_time", start_time)
+            description_node.setAttribute("end_time", end_time)
+            description_node.setAttribute("description", description)
+            description_node.innerHTML = "[V] " + description;
+            word_node.parentNode.insertBefore(description_node, word_node);
+        }
+
+        else{
+            var description_node = words_div.querySelectorAll('[seg_id="'+"v"+seg_id+'"]')[0]
+            description_node.setAttribute("description", description)
+            description_node.innerHTML = "[V] " + description;
+        }
+    });
+}

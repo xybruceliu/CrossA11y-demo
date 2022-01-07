@@ -40,3 +40,7 @@ blue #007aff 	rgb(0, 122, 255)
 .card-header:hover {
   cursor: pointer;
 }
+
+#preview-captions{
+  padding: 20px;
+}

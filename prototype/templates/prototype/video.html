@@ -76,27 +76,32 @@
             /></svg>{% endfor %}
         </div>
 
+        <div>
+          <p id="preview-captions"></p>
+        </div>
+
       </div>
         
 
       <!-- col 2: description problem visualization + edit -->
       <div class="col my-4 mx-2">
         <h3>Description Timeline</h3>
-        <div id="description-div"></div>
+        <div id="description-div">
 
 
-        <!-- add in transcript, each word is a div -->
-        {% for word in words %}<span
-        class = "word"
-        id="{{word.start_time}}{{word.end_time}}{{word.word}}"
-        visual_seg_id=v{{word.visual_seg_id}}
-        audio_seg_id=a{{word.audio_seg_id}}
-        start_time="{{word.start_time}}" 
-        end_time="{{word.end_time}}"
-        length="{{word.length}}"
-        is_non_speech="{{word.is_non_speech}}"
-        word="{{word.word}}">{{word.word}} </span>{% endfor %}
-
+          <!-- add in transcript, each word is a div -->
+          {% for word in words %}<span
+          class = "word"
+          id="{{word.start_time}}{{word.end_time}}{{word.word}}"
+          visual_seg_id=v{{word.visual_seg_id}}
+          audio_seg_id=a{{word.audio_seg_id}}
+          start_time="{{word.start_time}}" 
+          end_time="{{word.end_time}}"
+          length="{{word.length}}"
+          is_non_speech="{{word.is_non_speech}}"
+          word="{{word.word}}">{{word.word}} </span>{% endfor %}
+        
+        </div>
         <!-- {% for audio_seg in audio_segs %}<span 
           class="transcript" 
           id="ta{{audio_seg.seg_id}}" 
@@ -134,7 +139,14 @@
                 <div class="collapse" id="describe-visual-{{problem.visual_seg_id}}">
                   <div class="card card-body">
                     <textarea class="form-control" id="describe-visual-form-{{problem.visual_seg_id}}" rows="3"></textarea>
-                    <button type="submit" class="btn btn-primary" id="describe-visual-submit-{{problem.visual_seg_id}}">Submit</button>
+                    <button type="submit" 
+                            class="btn btn-primary describe-visual-submit" 
+                            id="describe-visual-submit-{{problem.visual_seg_id}}"
+                            video_id = "{{problem.video_id}}"
+                            seg_id = "{{problem.visual_seg_id}}"
+                            start_time = "{{problem.start_time}}"
+                            end_time = "{{problem.end_time}}"
+                            length = "{{problem.length}}">Submit</button>
                   </div>
                 </div>
               {% endif %}
@@ -151,7 +163,14 @@
                 <div class="collapse" id="describe-audio-{{problem.audio_seg_id}}">
                   <div class="card card-body">
                     <textarea class="form-control" id="describe-audio-form-{{problem.audio_seg_id}}" rows="3"></textarea>
-                    <button type="submit" class="btn btn-primary" id="describe-audio-submit-{{problem.audio_seg_id}}">Submit</button>
+                    <button type="submit" 
+                            class="btn btn-primary describe-audio-submit" 
+                            id="describe-audio-submit-{{problem.audio_seg_id}}"
+                            video_id = "{{problem.video_id}}"
+                            seg_id = "{{problem.audio_seg_id}}"
+                            start_time = "{{problem.start_time}}"
+                            end_time = "{{problem.end_time}}"
+                            length = "{{problem.length}}">Submit</button>
                   </div>
                 </div>
               {% endif %}
