@@ -69,7 +69,7 @@ function time2Word(time){
             window.speechSynthesis.speak(msg);
             msg.onend = function(event){
                 player.playVideo();
-                SPEARKING = false;
+                SPEAKING = false;
             }
         }
     }
@@ -377,7 +377,7 @@ for (var i = 0; i < describe_audio_buttons.length; i++) {
             start_time: start_time,
             end_time: end_time,
             length: length,
-            description: description
+            description: description–
         }));
         
         // add to description timeline interface
