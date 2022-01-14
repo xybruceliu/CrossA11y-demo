@@ -60,7 +60,7 @@ function time2Word(time){
         var start_time =describe_visual_node.getAttribute("start_time");
         var end_time = describe_visual_node.getAttribute("end_time");
 
-        if ((time > start_time) && (time <= (parseFloat(start_time) + 0.1)) && (SPEAKING==false)){
+        if ((time > start_time) && (time < (parseFloat(start_time) + 0.1)) && (SPEAKING==false)){
             SPEAKING = true;
             player.pauseVideo();
             var msg = new SpeechSynthesisUtterance();
@@ -377,7 +377,7 @@ for (var i = 0; i < describe_audio_buttons.length; i++) {
             start_time: start_time,
             end_time: end_time,
             length: length,
-            description: description–
+            description: description
         }));
         
         // add to description timeline interface
