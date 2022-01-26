@@ -29,6 +29,7 @@
       <!-- col 1: youtube embed + timeline vis -->
       <div class="col my-4 mx-2" id="video_embed_col">
 
+        <div class="sticky-top">
         <h3>Video</h3>
         <!-- embedded video -->
   
@@ -46,24 +47,10 @@
           <div id="vl"></div>
         </div>
 
-        <!-- visual timeline -->
-        <div id="v-timeline">
-          {% for visual_seg in visual_segs %}<svg class="v-timeline-svg" width="{{ visual_seg.norm_length }}%" height="12"><rect
-              class="v-timeline-rect" 
-              id="v{{visual_seg.seg_id}}"
-              width="100%" height="100%"
-              title="{{visual_seg.score}}"
-              start_time="{{visual_seg.start_time}}"
-              end_time="{{visual_seg.end_time}}"
-              score="{{visual_seg.score}}"
-              norm_score="{{visual_seg.norm_score}}"
-              match_scores="{{visual_seg.match_scores}}"
-              /></svg>{% endfor %}
-        </div>
-
         <!-- audio timeline -->
-        <div id="a-timeline">
-          {% for audio_seg in audio_segs %}<svg class="a-timeline-svg" width="{{ audio_seg.norm_length }}%" height="12"><rect
+        <div class="timeline" id="a-timeline">
+          <h4>Audio Accessibility</h4>
+          {% for audio_seg in audio_segs %}<svg class="a-timeline-svg" width="{{ audio_seg.norm_length }}%" height="20"><rect
             class="a-timeline-rect" 
             id="a{{audio_seg.seg_id}}"
             width="100%" height="100%"
@@ -76,122 +63,181 @@
             /></svg>{% endfor %}
         </div>
 
+        <!-- visual timeline -->
+        <div class="timeline" id="v-timeline">
+          <h4>Visual Accessibility</h4>
+          {% for visual_seg in visual_segs %}<svg class="v-timeline-svg" width="{{ visual_seg.norm_length }}%" height="20"><rect
+              class="v-timeline-rect" 
+              id="v{{visual_seg.seg_id}}"
+              width="100%" height="100%"
+              title="{{visual_seg.score}}"
+              start_time="{{visual_seg.start_time}}"
+              end_time="{{visual_seg.end_time}}"
+              score="{{visual_seg.score}}"
+              norm_score="{{visual_seg.norm_score}}"
+              match_scores="{{visual_seg.match_scores}}"
+              /></svg>{% endfor %}
+        </div>
+        
+
         <div>
           <p id="preview-captions"></p>
         </div>
-
-      </div>
-        
-
-      <!-- col 2: description problem visualization + edit -->
-      <div class="col my-4 mx-2">
-        <h3>Description Timeline</h3>
-        <div id="description-div">
-
-
-          <!-- add in transcript, each word is a div -->
-          {% for word in words %}<span
-          class = "word"
-          id="{{word.start_time}}{{word.end_time}}{{word.word}}"
-          visual_seg_id=v{{word.visual_seg_id}}
-          audio_seg_id=a{{word.audio_seg_id}}
-          start_time="{{word.start_time}}" 
-          end_time="{{word.end_time}}"
-          length="{{word.length}}"
-          is_non_speech="{{word.is_non_speech}}"
-          word="{{word.word}}">{{word.word}} </span>{% endfor %}
-        
         </div>
-        <!-- {% for audio_seg in audio_segs %}<span 
-          class="transcript" 
-          id="ta{{audio_seg.seg_id}}" 
-          start_time="{{audio_seg.start_time}}" 
-          end_time="{{audio_seg.end_time}}"
-          norm_score="{{audio_seg.norm_score}}"
-          transcript="{{audio_seg.transcript}}">{{audio_seg.transcript}}. </span>{% endfor %} -->
       </div>
+        
 
 
-      <!-- col 3: list of problems -->
+
+      <!-- col 2: Captions, audio accessibility -->
       <div class="col my-4 mx-2">
-        <h3>Problems</h3>
 
-        {% for problem in problems %}
-          <div class="card text-dark bg-light mb-3" 
-               style="max-width: 18rem;"
-               id="pa{{problem.audio_seg_id}}v{{problem.visual_seg_id}}"
-               audio_seg={{problem.audio_seg_id}}
-               visual_seg="{{problem.visual_seg_id}}"
-               start_time={{problem.start_time}}>
-            <div class="card-header">{{problem.start_time}} - {{problem.end_time}}</div>
-            <div class="card-body">
-              <p class="card-text"> {{problem.problem_description}} </p>
+        <div id="captions-header">
+          <h3>Captions</h3>
+        </div>
+        
+        <div id="captions-div">
+        
+        {% for audio_seg in audio_segs %}
+          {% if audio_seg.transcript == "NON-SPEECH" %}
+            <div class="aseg">
 
-              {% if problem.describe_visual %}
-                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#describe-visual-{{problem.visual_seg_id}}" aria-expanded="false" aria-controls="describe-visual-{{problem.visual_seg_id}}">
-                  <i class="bi bi-plus-lg"></i>
+              <div class="aseg-v-rect"
+              id="aseg{{audio_seg.seg_id}}"
+              seg_id="{{audio_seg.seg_id}}"
+              start_time="{{audio_seg.start_time}}"
+              end_time="{{audio_seg.end_time}}"
+              score="{{audio_seg.score}}"
+              norm_score="{{audio_seg.norm_score}}"
+              match_scores="{{audio_seg.match_scores}}"
+              transcript="{{audio_seg.transcript}}"></div>
+
+              <div class="input-group captions captions-edit" 
+              video_id="{{audio_seg.video_id}}"
+              seg_id="{{audio_seg.seg_id}}"
+              start_time="{{audio_seg.start_time}}" 
+              end_time="{{audio_seg.end_time}}" 
+              length="{{audio_seg.length}}" 
+              norm_score="{{audio_seg.norm_score}}" 
+              transcript="{{audio_seg.transcript}}"
+              editing="true">
+                <textarea type="text" class="form-control" id="describe-audio-form-{{audio_seg.seg_id}}" placeholder="Add caption of the non-speech"></textarea>
+                <button type="button" class="btn btn-outline-secondary btn-edit">Save</button>
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
-
-                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#ignore-visual-{{problem.visual_seg_id}}" aria-expanded="false" aria-controls="ignore-visual-{{problem.visual_seg_id}}">
-                  <i class="bi bi-check-lg"></i>
-                </button>
-  
-                <div class="collapse" id="describe-visual-{{problem.visual_seg_id}}">
-                  <div class="card card-body">
-                    <textarea class="form-control" id="describe-visual-form-{{problem.visual_seg_id}}" rows="3"></textarea>
-                    <button type="submit" 
-                            class="btn btn-primary describe-visual-submit" 
-                            id="describe-visual-submit-{{problem.visual_seg_id}}"
-                            video_id = "{{problem.video_id}}"
-                            seg_id = "{{problem.visual_seg_id}}"
-                            start_time = "{{problem.start_time}}"
-                            end_time = "{{problem.end_time}}"
-                            length = "{{problem.length}}">Submit</button>
-                  </div>
-                </div>
-              {% endif %}
-
-              {% if problem.describe_audio %}
-                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#describe-audio-{{problem.audio_seg_id}}" aria-expanded="false" aria-controls="describe-audio-{{problem.audio_seg_id}}">
-                  <i class="bi bi-plus-lg"></i>
-                </button>
-
-                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#ignore-audio-{{problem.audio_seg_id}}" aria-expanded="false" aria-controls="ignore-audio-{{problem.audio_seg_id}}">
-                  <i class="bi bi-check-lg"></i>
-                </button>
-
-                <div class="collapse" id="describe-audio-{{problem.audio_seg_id}}">
-                  <div class="card card-body">
-                    <textarea class="form-control" id="describe-audio-form-{{problem.audio_seg_id}}" rows="3"></textarea>
-                    <button type="submit" 
-                            class="btn btn-primary describe-audio-submit" 
-                            id="describe-audio-submit-{{problem.audio_seg_id}}"
-                            video_id = "{{problem.video_id}}"
-                            seg_id = "{{problem.audio_seg_id}}"
-                            start_time = "{{problem.start_time}}"
-                            end_time = "{{problem.end_time}}"
-                            length = "{{problem.length}}">Submit</button>
-                  </div>
-                </div>
-              {% endif %}
-              
-            
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">Dismiss</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">More details</a></li>
+                </ul>
+              </div>
             </div>
-          </div>
-        {% endfor %}
 
+          {% else %}
+            <div class="aseg">
+              <div class="aseg-v-rect"
+              id="aseg{{audio_seg.seg_id}}"
+              seg_id="{{audio_seg.seg_id}}"
+              start_time="{{audio_seg.start_time}}"
+              end_time="{{audio_seg.end_time}}"
+              score="{{audio_seg.score}}"
+              norm_score="{{audio_seg.norm_score}}"
+              match_scores="{{audio_seg.match_scores}}"
+              transcript="{{audio_seg.transcript}}"></div>
+
+              <div class="captions" 
+              video_id="{{audio_seg.video_id}}"
+              seg_id="{{audio_seg.seg_id}}"
+              start_time="{{audio_seg.start_time}}" 
+              end_time="{{audio_seg.end_time}}"
+              length="{{audio_seg.length}}" 
+              norm_score="{{audio_seg.norm_score}}"
+              transcript="{{audio_seg.transcript}}">
+                {{audio_seg.transcript}}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        </div>
       </div>
+
+
+
+
+      <!-- col 3: Video Descripiton, visual accessibility -->
+      <div class="col my-4 mx-2">
+
+        <div id="description-header">
+          <div id="description-heading">
+            <h3>Video Description</h3>
+          </div>
+          
+          <div id="description-filter" class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Filter
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#">Top 10%</a></li>
+              <li><a class="dropdown-item" href="#">Top 25%</a></li>
+              <li><a class="dropdown-item" href="#">Top 50%</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="description-div">
+          <!-- Default threshold = 0.25 -->
+          {% for visual_seg in visual_segs %}
+            {% if visual_seg.norm_score < 0.25 %}
+            <div class="vseg">
+              <div class="vseg-v-rect"
+              id="vseg{{visual_seg.seg_id}}"
+              seg_id="{{visual_seg.seg_id}}"
+              start_time="{{visual_seg.start_time}}"
+              end_time="{{visual_seg.end_time}}"
+              score="{{visual_seg.score}}"
+              norm_score="{{visual_seg.norm_score}}"
+              match_scores="{{visual_seg.match_scores}}"></div>
+
+              <div class="input-group description description-edit" 
+              video_id="{{visual_seg.video_id}}"
+              seg_id="{{visual_seg.seg_id}}"
+              start_time="{{visual_seg.start_time}}" 
+              end_time="{{visual_seg.end_time}}" 
+              length="{{visual_seg.length}}" 
+              norm_score="{{visual_seg.norm_score}}" 
+              editing="true">
+                <textarea type="text" class="form-control" id="describe-visual-form-{{visual_seg.seg_id}}" placeholder="Add description of the visual"></textarea>
+                <button type="button" class="btn btn-outline-secondary btn-edit">Save</button>
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">Dismiss</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">More details</a></li>
+                </ul>
+              </div>
+            </div>
+              
+            {% endif %}
+          {% endfor %}
+
+        </div>
+      </div>
+
+
+
+      
+
+
     </div>
 
 
     <!-- Embed the youtube video, and add even listerners to jump to time -->
     <script src="https://www.youtube.com/iframe_api"></script>
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-
     <!-- timeline -->
     <script src="../../static/js/video.js"></script>
-
     <!-- Js for bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   </body>

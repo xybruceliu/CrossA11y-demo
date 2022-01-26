@@ -111,53 +111,53 @@ def add(request, video_id):
             
 
 
-    # add all words
-    for i, row in df_words.iterrows():
-        Word.objects.create(video_id=video_id,
-                            visual_seg_id=row["visual_seg_id"],
-                            audio_seg_id=row["audio_seg_id"],
-                            start_time=row["start"],
-                            end_time=row["end"],
-                            length=row["length"],
-                            word=row["word"]
-                            )
+    # # add all words
+    # for i, row in df_words.iterrows():
+    #     Word.objects.create(video_id=video_id,
+    #                         visual_seg_id=row["visual_seg_id"],
+    #                         audio_seg_id=row["audio_seg_id"],
+    #                         start_time=row["start"],
+    #                         end_time=row["end"],
+    #                         length=row["length"],
+    #                         word=row["word"]
+    #                         )
 
 
-    # add all problems
-    visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
-    audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
+    # # add all problems
+    # visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
+    # audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
 
-    for visual_seg in visual_segs:
-        if visual_seg.norm_score < 0.25:
-            Problem.objects.create(
-                video_id = video_id,
-                problem_description = "Needs a description of the visual.",
-                visual_seg_id = visual_seg.seg_id,
-                audio_seg_id = -1,
-                start_time = visual_seg.start_time,
-                end_time = visual_seg.end_time,
-                length = visual_seg.length,
-                describe_visual = True,
-                describe_audio = False,
-                is_ignored = False,
-                is_fixed = False
-            )
+    # for visual_seg in visual_segs:
+    #     if visual_seg.norm_score < 0.25:
+    #         Problem.objects.create(
+    #             video_id = video_id,
+    #             problem_description = "Needs a description of the visual.",
+    #             visual_seg_id = visual_seg.seg_id,
+    #             audio_seg_id = -1,
+    #             start_time = visual_seg.start_time,
+    #             end_time = visual_seg.end_time,
+    #             length = visual_seg.length,
+    #             describe_visual = True,
+    #             describe_audio = False,
+    #             is_ignored = False,
+    #             is_fixed = False
+    #         )
     
-    for audio_seg in audio_segs:
-        if audio_seg.norm_score < 0.25:
-            Problem.objects.create(
-                video_id = video_id,
-                problem_description = "Needs a description of the audio.",
-                visual_seg_id = -1,
-                audio_seg_id = audio_seg.seg_id,
-                start_time = audio_seg.start_time,
-                end_time = audio_seg.end_time,
-                length = audio_seg.length,
-                describe_visual = False,
-                describe_audio = True,
-                is_ignored = False,
-                is_fixed = False
-            )
+    # for audio_seg in audio_segs:
+    #     if audio_seg.norm_score < 0.25:
+    #         Problem.objects.create(
+    #             video_id = video_id,
+    #             problem_description = "Needs a description of the audio.",
+    #             visual_seg_id = -1,
+    #             audio_seg_id = audio_seg.seg_id,
+    #             start_time = audio_seg.start_time,
+    #             end_time = audio_seg.end_time,
+    #             length = audio_seg.length,
+    #             describe_visual = False,
+    #             describe_audio = True,
+    #             is_ignored = False,
+    #             is_fixed = False
+    #         )
 
     return HttpResponse(video_id + " successfully added!")
 

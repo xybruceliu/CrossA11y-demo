@@ -4,6 +4,9 @@ red #ff3b30 	rgb(255, 59, 48)
 green #4cd964 rgb(76, 217, 100)
 blue #007aff 	rgb(0, 122, 255)
 */
+#youtube-video {
+  margin-top: 50px;
+}
 
 
 .v-timeline-svg:hover {
@@ -23,23 +26,81 @@ blue #007aff 	rgb(0, 122, 255)
 
 #vl {
   position: absolute; 
+  margin-top: 50px;
   width: 2px; 
-  height: 5vh; 
+  height: 120px; 
   background-color: rgb(171, 171, 171); 
   z-index: auto;
 }
 
-.word:hover {
+.timeline{
+  margin-top: 30px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+
+
+
+.aseg{
+  display: flex;
+  height: max-content;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.aseg-v-rect{
+  width: 20px;
+}
+
+.aseg-v-rect:hover {
   cursor: pointer;
 }
 
-.problem-non-speech {
+.captions {
+  height: auto;
+  width: 100%;
+  margin-left: 10px;
+}
+
+#captions-header
+{
+  display: flex;
+}
+
+
+#description-header
+{
+  display: flex;
+}
+#description-filter
+{
+  margin-left: 5%;
+}
+
+.vseg{
+  display: flex;
+  height: max-content;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.vseg-v-rect{
+  width: 20px;
+}
+
+.vseg-v-rect:hover {
   cursor: pointer;
 }
 
-.card-header:hover {
-  cursor: pointer;
+.description {
+  height: auto;
+  width: 100%;
+  margin-left: 10px;
 }
+
 
 #preview-captions{
   padding: 20px;
