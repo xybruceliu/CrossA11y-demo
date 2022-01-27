@@ -50,17 +50,44 @@ var SPEAKING = false;
 function timeRender(time){
 
     // add highlight vertical audio segs
+    // preview captions
     var aseg_v_rects = document.getElementsByClassName("aseg-v-rect");
     for (var i = 0; i < aseg_v_rects.length; i++) {
         var aseg_v_rect = aseg_v_rects[i];
         var start_time = aseg_v_rect.getAttribute("start_time");
         var end_time =aseg_v_rect.getAttribute("end_time");
 
+        var preview_captions = document.getElementById("preview-captions");
+
+        let v_timestamp = document.getElementById( "v-timestamp-"+aseg_v_rect.getAttribute("seg_id"));
+
         if ((time >= start_time) && (time <= end_time)){
+            // highlight
             aseg_v_rect.style.borderLeft = "5px solid #FFDA6A";
+            v_timestamp.style.backgroundColor = "#FFDA6A";
+
+
+            // if described, preview captions
+            let captions_edits = aseg_v_rect.parentNode.getElementsByClassName("captions-edit");
+            let seg_id = aseg_v_rect.getAttribute("seg_id");
+
+            if (captions_edits.length > 0){
+                let captions_edit = captions_edits[0];
+                    if (captions_edit.getAttribute("editing") == "false"){
+                        let description = document.getElementById("describe-audio-form-"+seg_id).value;
+                        preview_captions.innerHTML = description;
+                    }
+                    else{
+                        preview_captions.innerHTML = "";
+                    }
+            }
+            else{
+                preview_captions.innerHTML = "";
+            }
         }
         else{
             aseg_v_rect.style.borderLeft = "";
+            v_timestamp.style.backgroundColor = "";
         }
     }
 
@@ -71,55 +98,41 @@ function timeRender(time){
         var start_time = vseg_v_rect.getAttribute("start_time");
         var end_time =vseg_v_rect.getAttribute("end_time");
 
+
         if ((time >= start_time) && (time <= end_time)){
             vseg_v_rect.style.borderLeft = "5px solid #FFDA6A";
+       
+            if ((time < (parseFloat(start_time) + 0.1)) && (SPEAKING==false)){
+                // if described, preview video description
+                let description_edits = vseg_v_rect.parentNode.getElementsByClassName("description-edit");
+                let seg_id = vseg_v_rect.getAttribute("seg_id");
+
+                if (description_edits.length > 0){
+                    let description_edit = description_edits[0];
+                    let description = document.getElementById("describe-visual-form-"+seg_id).value;
+                        if ((description_edit.getAttribute("editing") == "false") && (description.length > 0) && (SPEAKING==false)){
+                            SPEAKING = true;
+                            player.pauseVideo();
+                            var msg = new SpeechSynthesisUtterance();
+                            msg.text = description;
+                            console.log(msg.text)
+                            window.speechSynthesis.speak(msg);
+                            msg.onend = function(event){
+                                player.playVideo();
+                                SPEAKING = false;
+                            }
+                        }
+                }
+            }
         }
         else{
             vseg_v_rect.style.borderLeft = "";
         }
     }
-
-    // preview captions
-    var describe_audio_nodes = document.getElementsByClassName("describe_audio_node");
-    for (var i = 0; i < describe_audio_nodes.length; i++){
-        var describe_audio_node = describe_audio_nodes[i];
-        var start_time =describe_audio_node.getAttribute("start_time");
-        var end_time = describe_audio_node.getAttribute("end_time");
-
-        var preview_captions = document.getElementById("preview-captions");
-        if ((time >= start_time) && (time <= end_time)){
-            preview_captions.innerHTML = describe_audio_node.getAttribute("description");
-        }
-        else{
-            preview_captions.innerHTML = '';
-        }
-    }
-
-    // preview AD
-    var describe_visual_nodes = document.getElementsByClassName("describe_visual_node");
-    for (var i = 0; i < describe_visual_nodes.length; i++){
-        var describe_visual_node = describe_visual_nodes[i];
-        var start_time =describe_visual_node.getAttribute("start_time");
-        var end_time = describe_visual_node.getAttribute("end_time");
-
-        if ((time > start_time) && (time < (parseFloat(start_time) + 0.1)) && (SPEAKING==false)){
-            SPEAKING = true;
-            player.pauseVideo();
-            var msg = new SpeechSynthesisUtterance();
-            msg.text = describe_visual_node.getAttribute("description");
-            console.log(msg.text)
-            window.speechSynthesis.speak(msg);
-            msg.onend = function(event){
-                player.playVideo();
-                SPEAKING = false;
-            }
-        }
-    }
-
 }
 
 
-// 1 TIMELINE
+// 1 HORIZONTAL TIMELINE
 // gradient color change
 // c1, c2 = [r,g,b]
 // val 0-1
@@ -261,6 +274,25 @@ for (var i = 0; i < captions.length; i++) {
     }
 }
 
+function sec2Time(duration){
+    // Hours, minutes and seconds
+    var hrs = Math.round(duration / 3600);
+    var mins = Math.round((duration % 3600) / 60);
+    var secs = Math.round(duration % 60);
+
+    // Output like "1:01" or "4:03:59" or "123:03:59"
+    var ret = "";
+
+    if (hrs > 0) {
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+}
+
+
 // audio vertical rectangles for timeline
 var aseg_v_rects = document.getElementsByClassName("aseg-v-rect");
 for (var i = 0; i < aseg_v_rects.length; i++) {
@@ -294,6 +326,27 @@ for (var i = 0; i < aseg_v_rects.length; i++) {
         var end_time = e.target.getAttribute("end_time");
         player.seekTo(Math.max(start_time, 0));
     });
+
+
+
+    // Add vertical timestamps and align
+    let top = aseg_v_rect.getBoundingClientRect().top;
+    let start_time = aseg_v_rect.getAttribute("start_time");
+    let v_timestamp = document.createElement('div');
+    v_timestamp.classList.add("v-timestamp");
+    v_timestamp.setAttribute("id", "v-timestamp-"+aseg_v_rect.getAttribute("seg_id"));
+    v_timestamp.setAttribute("seg_id", aseg_v_rect.getAttribute("seg_id"));
+    v_timestamp.setAttribute("start_time", start_time);
+    v_timestamp.innerHTML = sec2Time(aseg_v_rect.getAttribute("start_time"));
+    v_timestamp.style.position = 'absolute';
+    v_timestamp.style.top = top+"px";
+
+    v_timestamp.addEventListener("click", (e) => {
+        player.seekTo(Math.max(start_time, 0));
+    });
+
+    let v_timestamps_col = document.getElementById("v-timestamps-col");
+    v_timestamps_col.appendChild(v_timestamp);
 }
 
 
@@ -314,6 +367,12 @@ for (var i = 0; i < descriptions.length; i++) {
     let length = description.getAttribute("length");
     let n = Math.max(1, Math.round(length/4));
     textarea.setAttribute("rows", n);
+
+    // by default show the top 25% problems
+    let norm_score = description.getAttribute("norm_score");
+    if (norm_score > 0.25){
+        description.parentNode.style.display = "none";
+    }
 }
 
 // visual vertical rectangles for timeline
@@ -350,6 +409,8 @@ for (var i = 0; i < vseg_v_rects.length; i++) {
         player.seekTo(Math.max(start_time, 0));
     });
 }
+
+reloadDescriptionCol(0.25)
 
 
 
@@ -403,6 +464,9 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
             var rect = document.getElementById("a"+seg_id);
             rect.style.fill = "#CFE2FF";
 
+            // disable dismiss button
+            var dismiss_button = document.getElementById("describe-audio-dismiss-" + seg_id);
+            dismiss_button.classList.add("disabled")
         }
    
         // else if not editing
@@ -418,6 +482,10 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
             // Change color in the 1st col
             var rect = document.getElementById("a"+seg_id);
             rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+
+            // enable dismiss button
+            var dismiss_button = document.getElementById("describe-audio-dismiss-" + seg_id);
+            dismiss_button.classList.remove("disabled")
         }
     });
 }
@@ -476,6 +544,10 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             var rect = document.getElementById("v"+seg_id);
             rect.style.fill = "#CFE2FF";
 
+            // disable dismiss button
+            var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
+            dismiss_button.classList.add("disabled")
+
         }
    
         // else if not editing
@@ -491,7 +563,90 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             // Change color in the 1st col
             var rect = document.getElementById("v"+seg_id);
             rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+
+            // enable dismiss button
+            var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
+            dismiss_button.classList.remove("disabled")
         }
     });
 }
+
+
+// Dismiss
+
+
+
+
+// Filter and Align
+function reloadDescriptionCol(threshold){
+    let descriptions = document.getElementsByClassName("description");
+    let last_bottom = document.getElementById("aseg0").getBoundingClientRect().top;
+
+
+    for (var i = 0; i < descriptions.length; i++) {
+        var description = descriptions[i];
+        // Filter
+        let norm_score = description.getAttribute("norm_score");
+        if (norm_score > threshold){
+            description.parentNode.style.display = "none";
+        }
+
+        else{
+            description.parentNode.style.display = "";
+
+            // Align
+            let start_time = parseFloat(description.getAttribute("start_time"));
+            // Find aseg position
+            var aseg_v_rects = document.getElementsByClassName("aseg-v-rect");
+            for (var j = 0; j < aseg_v_rects.length; j++) {
+                var aseg_v_rect = aseg_v_rects[j];
+                var aseg_start_time = parseFloat(aseg_v_rect.getAttribute("start_time"));
+                var aseg_end_time = parseFloat(aseg_v_rect.getAttribute("end_time"));
+
+                // position 
+                if ((start_time >= aseg_start_time) && (start_time < aseg_end_time)){
+                    let aseg_top = aseg_v_rect.getBoundingClientRect().top;
+                    let aseg_bottom = aseg_v_rect.getBoundingClientRect().bottom;
+                    let top = aseg_top + (aseg_bottom-aseg_top) * (start_time - aseg_start_time) / (aseg_end_time - aseg_start_time); 
+                    
+                    // adapt caption column if space not enough
+                    let marginTop = top-last_bottom;
+                    console.log(last_bottom);
+                    
+                    if (marginTop < 0){
+                        // force it to be 1px
+                        let vseg = description.parentNode;
+                        vseg.style.marginTop = "1px";
+                        last_bottom = vseg.getBoundingClientRect().bottom;
+                    }
+
+                    // space ok
+                    else{
+                        let vseg = description.parentNode;
+                        vseg.style.marginTop = marginTop+"px";
+                        last_bottom = vseg.getBoundingClientRect().bottom;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Select filter threshold
+let dropdown_items = document.getElementsByClassName("dropdown-threshold");
+for (var i = 0; i < dropdown_items.length; i++) {
+    dropdown_items.item(i).addEventListener("click", (e) => {
+        let threshold = e.target.getAttribute("threshold");
+        // reload description list
+        reloadDescriptionCol(threshold);
+
+        // highlight current threshold
+        for (var j = 0; j < dropdown_items.length; j++) {
+            dropdown_items.item(j).classList.remove("active");
+        }
+        e.target.classList.add("active");
+    });
+}
+
+
 

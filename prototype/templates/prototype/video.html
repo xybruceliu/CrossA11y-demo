@@ -80,14 +80,18 @@
         </div>
         
 
-        <div>
+        <div class="preview">
+          <h4>Captions Preview</h4>
           <p id="preview-captions"></p>
         </div>
         </div>
       </div>
         
 
-
+      <!-- col 1.5: vertical timestamps -->
+      <div class="col-auto my-4 mx-4">
+        <div id="v-timestamps-col"></div>
+      </div>
 
       <!-- col 2: Captions, audio accessibility -->
       <div class="col my-4 mx-2">
@@ -127,9 +131,9 @@
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" href="#">Dismiss</a></li>
+                  <li><a class="dropdown-item" id="describe-audio-dismiss-{{audio_seg.seg_id}}">Dismiss</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">More details</a></li>
+                  <li><a class="dropdown-item">More details</a></li>
                 </ul>
               </div>
             </div>
@@ -174,13 +178,13 @@
           </div>
           
           <div id="description-filter" class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Filter
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">Top 10%</a></li>
-              <li><a class="dropdown-item" href="#">Top 25%</a></li>
-              <li><a class="dropdown-item" href="#">Top 50%</a></li>
+              <li><a class="dropdown-item dropdown-threshold" id="dropdown-item-10" threshold=0.1>Top 10%</a></li>
+              <li><a class="dropdown-item dropdown-threshold active" id="dropdown-item-25" threshold=0.25>Top 25%</a></li>
+              <li><a class="dropdown-item dropdown-threshold" id="dropdown-item-50" threshold=0.5>Top 50%</a></li>
             </ul>
           </div>
         </div>
@@ -188,7 +192,7 @@
         <div id="description-div">
           <!-- Default threshold = 0.25 -->
           {% for visual_seg in visual_segs %}
-            {% if visual_seg.norm_score < 0.25 %}
+
             <div class="vseg">
               <div class="vseg-v-rect"
               id="vseg{{visual_seg.seg_id}}"
@@ -213,14 +217,13 @@
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" href="#">Dismiss</a></li>
+                  <li><a class="dropdown-item" id="describe-visual-dismiss-{{visual_seg.seg_id}}">Dismiss</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">More details</a></li>
+                  <li><a class="dropdown-item">More details</a></li>
                 </ul>
               </div>
             </div>
               
-            {% endif %}
           {% endfor %}
 
         </div>

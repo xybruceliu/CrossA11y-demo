@@ -37,11 +37,29 @@ blue #007aff 	rgb(0, 122, 255)
   margin-top: 30px;
 }
 
+.preview{
+  margin-top: 60px;
+}
+
+#preview-captions{
+  margin-top: 10px;
+  font-size: large;
+  font-weight: bold;
+}
+
 h4 {
   font-size: 16px;
 }
 
 
+.v-timestamp{
+  margin-top: 5px;
+}
+
+
+.v-timestamp:hover {
+  cursor: pointer;
+}
 
 
 .aseg{
@@ -84,7 +102,7 @@ h4 {
   display: flex;
   height: max-content;
   width: 100%;
-  margin-top: 30px;
+  /* margin-top: 30px; */
 }
 
 .vseg-v-rect{
@@ -102,6 +120,6 @@ h4 {
 }
 
 
-#preview-captions{
-  padding: 20px;
+.dropdown-item:hover{
+  cursor: pointer;
 }
