@@ -31,6 +31,8 @@
 
         <div class="sticky-top">
         <h3>Video</h3>
+        <h4 class="number-problems"><span id="number-caption-problems">X</span> audio issues left</h4>
+        <h4 class="number-problems"><span id="number-description-problems">X</span> visual issues left</h4>
         <!-- embedded video -->
   
         <iframe 
@@ -124,14 +126,15 @@
               length="{{audio_seg.length}}" 
               norm_score="{{audio_seg.norm_score}}" 
               transcript="{{audio_seg.transcript}}"
-              editing="true">
+              editing="true"
+              dismissed="false">
                 <textarea type="text" class="form-control" id="describe-audio-form-{{audio_seg.seg_id}}" placeholder="Add caption of the non-speech"></textarea>
                 <button type="button" class="btn btn-outline-secondary btn-edit">Save</button>
                 <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" id="describe-audio-dismiss-{{audio_seg.seg_id}}">Dismiss</a></li>
+                  <li><a class="dropdown-item btn-dismiss" id="describe-audio-dismiss-{{audio_seg.seg_id}}">Dismiss</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item">More details</a></li>
                 </ul>
@@ -210,14 +213,15 @@
               end_time="{{visual_seg.end_time}}" 
               length="{{visual_seg.length}}" 
               norm_score="{{visual_seg.norm_score}}" 
-              editing="true">
+              editing="true"
+              dismissed="false">
                 <textarea type="text" class="form-control" id="describe-visual-form-{{visual_seg.seg_id}}" placeholder="Add description of the visual"></textarea>
                 <button type="button" class="btn btn-outline-secondary btn-edit">Save</button>
                 <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" id="describe-visual-dismiss-{{visual_seg.seg_id}}">Dismiss</a></li>
+                  <li><a class="dropdown-item btn-dismiss" id="describe-visual-dismiss-{{visual_seg.seg_id}}">Dismiss</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item">More details</a></li>
                 </ul>

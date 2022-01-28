@@ -373,6 +373,9 @@ for (var i = 0; i < descriptions.length; i++) {
     if (norm_score > 0.25){
         description.parentNode.style.display = "none";
     }
+    else{
+        description.parentNode.style.display = "";
+    }
 }
 
 // visual vertical rectangles for timeline
@@ -422,6 +425,7 @@ reloadDescriptionCol(0.25)
 // Captions
 let captions_edit_buttons = document.getElementById("captions-div").getElementsByClassName("btn-edit");
 for (var i = 0; i < captions_edit_buttons.length; i++) {
+    // Save and Edit
     captions_edit_buttons[i].addEventListener("click", (e) =>{      
         let caption_div = e.target.parentNode;
         let textarea = caption_div.getElementsByTagName("textarea")[0];
@@ -487,6 +491,79 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
             var dismiss_button = document.getElementById("describe-audio-dismiss-" + seg_id);
             dismiss_button.classList.remove("disabled")
         }
+
+        update_num_problems();
+    });
+
+    // Dismiss
+    let dismiss_button = captions_edit_buttons[i].parentNode.getElementsByClassName("btn-dismiss")[0];
+    dismiss_button.addEventListener("click", (e)=>{
+        let caption_div = e.target.parentNode.parentNode.parentNode;
+
+        // if not yet dismissed
+        if (caption_div.getAttribute("dismissed") == "false"){
+            let seg_id = caption_div.getAttribute("seg_id");
+
+            // Set dismissed attribute to true
+            caption_div.setAttribute("dismissed", "true");
+            
+            // Set editing attribute to false
+            caption_div.setAttribute("editing", "false");
+
+            // Change color of vertical timeline
+            var v_rect = document.getElementById("aseg"+seg_id);
+            v_rect.style.backgroundColor = "#adb5bd";
+
+            // Change color in the 1st col
+            var rect = document.getElementById("a"+seg_id);
+            rect.style.fill = "#adb5bd";
+
+            // Clear textarea text and disable it
+            let textarea = caption_div.getElementsByTagName("textarea")[0];
+            textarea.value = "";
+            textarea.setAttribute("disabled", true);
+
+            // Disable Save button
+            let edit_button = caption_div.getElementsByClassName("btn-edit")[0];
+            edit_button.setAttribute("disabled", true);
+
+            // Change dismiss button to undismiss
+            dismiss_button.innerHTML = "Undismiss";
+
+        }
+
+        // if already dismissed
+        else{
+            let seg_id = caption_div.getAttribute("seg_id");
+
+            // Set dismissed attribute to true
+            caption_div.setAttribute("dismissed", "false");
+            
+            // Set editing attribute to false
+            caption_div.setAttribute("editing", "true");
+
+            // Change color of vertical timeline
+            var norm_score = caption_div.getAttribute("norm_score");
+            var v_rect = document.getElementById("aseg"+seg_id);
+            v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
+
+            // Change color in the 1st col
+            var rect = document.getElementById("a"+seg_id);
+            rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+
+            // Clear textarea text and disable it
+            let textarea = caption_div.getElementsByTagName("textarea")[0];
+            textarea.removeAttribute("disabled");
+
+            // Disable Save button
+            let edit_button = caption_div.getElementsByClassName("btn-edit")[0];
+            edit_button.removeAttribute("disabled");
+
+            // Change dismiss button to undismiss
+            dismiss_button.innerHTML = "Dismiss";
+        }
+
+        update_num_problems();
     });
 }
 
@@ -547,7 +624,6 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             // disable dismiss button
             var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
             dismiss_button.classList.add("disabled")
-
         }
    
         // else if not editing
@@ -568,11 +644,81 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
             dismiss_button.classList.remove("disabled")
         }
+
+        update_num_problems();
+    });
+    
+    // Dismiss
+    let dismiss_button = description_edit_buttons[i].parentNode.getElementsByClassName("btn-dismiss")[0];
+    dismiss_button.addEventListener("click", (e)=>{
+        let description_div = e.target.parentNode.parentNode.parentNode;
+
+        // if not yet dismissed
+        if (description_div.getAttribute("dismissed") == "false"){
+            let seg_id = description_div.getAttribute("seg_id");
+
+            // Set dismissed attribute to true
+            description_div.setAttribute("dismissed", "true");
+            
+            // Set editing attribute to false
+            description_div.setAttribute("editing", "false");
+
+            // Change color of vertical timeline
+            var v_rect = document.getElementById("vseg"+seg_id);
+            v_rect.style.backgroundColor = "#adb5bd";
+
+            // Change color in the 1st col
+            var rect = document.getElementById("v"+seg_id);
+            rect.style.fill = "#adb5bd";
+
+            // Clear textarea text and disable it
+            let textarea = description_div.getElementsByTagName("textarea")[0];
+            textarea.value = "";
+            textarea.setAttribute("disabled", true);
+
+            // Disable Save button
+            let edit_button = description_div.getElementsByClassName("btn-edit")[0];
+            edit_button.setAttribute("disabled", true);
+
+            // Change dismiss button to undismiss
+            dismiss_button.innerHTML = "Undismiss";
+
+        }
+
+        // if already dismissed
+        else{
+            let seg_id = description_div.getAttribute("seg_id");
+
+            // Set dismissed attribute to true
+            description_div.setAttribute("dismissed", "false");
+            
+            // Set editing attribute to false
+            description_div.setAttribute("editing", "true");
+
+            // Change color of vertical timeline
+            var norm_score = description_div.getAttribute("norm_score");
+            var v_rect = document.getElementById("vseg"+seg_id);
+            v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
+
+            // Change color in the 1st col
+            var rect = document.getElementById("v"+seg_id);
+            rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+
+            // Clear textarea text and disable it
+            let textarea = description_div.getElementsByTagName("textarea")[0];
+            textarea.removeAttribute("disabled");
+
+            // Disable Save button
+            let edit_button = description_div.getElementsByClassName("btn-edit")[0];
+            edit_button.removeAttribute("disabled");
+
+            // Change dismiss button to undismiss
+            dismiss_button.innerHTML = "Dismiss";
+        }
+
+        update_num_problems();
     });
 }
-
-
-// Dismiss
 
 
 
@@ -645,8 +791,27 @@ for (var i = 0; i < dropdown_items.length; i++) {
             dropdown_items.item(j).classList.remove("active");
         }
         e.target.classList.add("active");
+
+        update_num_problems();
     });
 }
 
 
 
+// Update number of problems left
+function update_num_problems(){
+    let caption_num_problems = document.getElementById("number-caption-problems");
+    let captions_edits = document.getElementById("captions-div");
+    caption_num_problems.innerHTML = captions_edits.querySelectorAll('[editing="true"]').length;
+    let description_num_problems = document.getElementById("number-description-problems");
+    let description_edits = document.getElementsByClassName("description-edit");
+    let v_count = 0;
+
+    for (var i = 0; i < description_edits.length; i++) {
+        if ((description_edits[i].getAttribute("editing") == "true") && (description_edits[i].parentNode.style.display !== "none")){
+            v_count = v_count + 1;
+        }
+    }
+    description_num_problems.innerHTML = v_count;
+}
+update_num_problems();

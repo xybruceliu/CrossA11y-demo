@@ -123,3 +123,8 @@ h4 {
 .dropdown-item:hover{
   cursor: pointer;
 }
+
+
+.number-problems{
+  color: gray;
+}
