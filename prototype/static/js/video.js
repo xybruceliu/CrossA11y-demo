@@ -572,6 +572,41 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
 
 
 // Description
+
+// helper function to check if an entity is already covered by the description
+function is_entity_mentioned(entity, description){
+
+    let words = description.match(/\b(\w+)\b/g);
+    for (word of words){
+        if (levenshteinDistance(entity, word) < 3){
+            return true;
+        }
+    }
+    return false;
+}
+
+const levenshteinDistance = (str1 = '', str2 = '') => {
+    const track = Array(str2.length + 1).fill(null).map(() =>
+    Array(str1.length + 1).fill(null));
+    for (let i = 0; i <= str1.length; i += 1) {
+       track[0][i] = i;
+    }
+    for (let j = 0; j <= str2.length; j += 1) {
+       track[j][0] = j;
+    }
+    for (let j = 1; j <= str2.length; j += 1) {
+       for (let i = 1; i <= str1.length; i += 1) {
+          const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+          track[j][i] = Math.min(
+             track[j][i - 1] + 1, // deletion
+             track[j - 1][i] + 1, // insertion
+             track[j - 1][i - 1] + indicator, // substitution
+          );
+       }
+    }
+    return track[str2.length][str1.length];
+ };
+
 let description_edit_buttons = document.getElementById("description-div").getElementsByClassName("btn-edit");
 for (var i = 0; i < description_edit_buttons.length; i++) {
     description_edit_buttons[i].addEventListener("click", (e) =>{      
@@ -624,6 +659,62 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             // disable dismiss button
             var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
             dismiss_button.classList.add("disabled")
+
+
+
+            // Feedback
+            var alertPlaceholder = document.getElementById('vseg-feedback'+seg_id)
+
+            var wrapper = document.createElement('div');
+            wrapper.classList.add("alert");
+            wrapper.classList.add("alert-success");
+            wrapper.classList.add("alert-warning");
+            wrapper.setAttribute("role", "alert");
+            wrapper.innerHTML='<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+
+            var detected_visuals = v_rect.getAttribute("detected_visuals").split("),");
+            console.log(detected_visuals)
+
+           
+
+            for (detected_visual of detected_visuals){
+                detected_visual = detected_visual.substring(1, detected_visual.length-1)
+                let entity = detected_visual.split(",")[0];
+                entity = entity.substring(1, entity.length)
+                let score = detected_visual.split(",")[1];
+                // let timestamp = detected_visual.split(",")[1];
+
+                if (entity == ""){
+                    continue;
+                }
+
+                // if not already mentioned/covered
+                if (!is_entity_mentioned(entity, description)){
+                    var detected_visual_span = document.createElement('span')
+                    detected_visual_span.classList.add("detected-visual-entity")
+                    detected_visual_span.setAttribute("score", score);
+                    detected_visual_span.innerText = entity + ", ";
+                    
+                    // add to feedback
+                    wrapper.appendChild(detected_visual_span);
+                    
+                    // detected_visual_span.addEventListener("click", (e) => {
+                    //     var start_time = e.target.getAttribute("timestamp");
+                    //     player.seekTo(Math.max(start_time, 0));
+                    // });
+                }
+            }
+
+            // if there's a previous alert, delete and update
+            var prev_wrapper = alertPlaceholder.getElementsByClassName("alert")[0];
+            if (prev_wrapper !== undefined){
+                prev_wrapper.remove();
+            }
+
+            // if at least 1 entity detected, append
+            if (wrapper.childElementCount > 1){
+                alertPlaceholder.append(wrapper);
+            }
         }
    
         // else if not editing
@@ -643,6 +734,7 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             // enable dismiss button
             var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
             dismiss_button.classList.remove("disabled")
+
         }
 
         update_num_problems();
@@ -757,7 +849,6 @@ function reloadDescriptionCol(threshold){
                     
                     // adapt caption column if space not enough
                     let marginTop = top-last_bottom;
-                    console.log(last_bottom);
                     
                     if (marginTop < 0){
                         // force it to be 1px

@@ -15,6 +15,8 @@ class VisualSeg(models.Model):
     score = models.FloatField() 
     norm_score = models.FloatField() # normalized score 0-1 within the video
 
+    detected_visuals = models.CharField(max_length=1000) # list of visual entities detected in this visual segment
+
     def is_grounded(self):
         return self.score > 0
 

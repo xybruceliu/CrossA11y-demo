@@ -196,6 +196,7 @@
           <!-- Default threshold = 0.25 -->
           {% for visual_seg in visual_segs %}
 
+            
             <div class="vseg">
               <div class="vseg-v-rect"
               id="vseg{{visual_seg.seg_id}}"
@@ -204,7 +205,8 @@
               end_time="{{visual_seg.end_time}}"
               score="{{visual_seg.score}}"
               norm_score="{{visual_seg.norm_score}}"
-              match_scores="{{visual_seg.match_scores}}"></div>
+              match_scores="{{visual_seg.match_scores}}"
+              detected_visuals="{{visual_seg.detected_visuals}}"></div>
 
               <div class="input-group description description-edit" 
               video_id="{{visual_seg.video_id}}"
@@ -227,6 +229,7 @@
                 </ul>
               </div>
             </div>
+            <div id="vseg-feedback{{visual_seg.seg_id}}"></div>
               
           {% endfor %}
 
