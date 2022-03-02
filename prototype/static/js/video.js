@@ -66,23 +66,30 @@ function timeRender(time){
             aseg_v_rect.style.borderLeft = "5px solid #FFDA6A";
             v_timestamp.style.backgroundColor = "#FFDA6A";
 
+            if (aseg_v_rect.parentNode.getElementsByClassName("captions-edit").length > 0 ){
+                // if described, preview captions
+                let captions_edits = aseg_v_rect.parentNode.getElementsByClassName("captions-edit");
+                let seg_id = aseg_v_rect.getAttribute("seg_id");
 
-            // if described, preview captions
-            let captions_edits = aseg_v_rect.parentNode.getElementsByClassName("captions-edit");
-            let seg_id = aseg_v_rect.getAttribute("seg_id");
-
-            if (captions_edits.length > 0){
-                let captions_edit = captions_edits[0];
-                    if (captions_edit.getAttribute("editing") == "false"){
-                        let description = document.getElementById("describe-audio-form-"+seg_id).value;
-                        preview_captions.innerHTML = description;
-                    }
-                    else{
-                        preview_captions.innerHTML = "";
-                    }
+                if (captions_edits.length > 0){
+                    let captions_edit = captions_edits[0];
+                        if (captions_edit.getAttribute("editing") == "false"){
+                            let description = document.getElementById("describe-audio-form-"+seg_id).value;
+                            preview_captions.innerHTML = description;
+                        }
+                        else{
+                            preview_captions.innerHTML = "";
+                        }
+                }
+                else{
+                    preview_captions.innerHTML = "";
+                }
             }
+
+            // if original captions
             else{
-                preview_captions.innerHTML = "";
+                let captions = aseg_v_rect.parentNode.getElementsByClassName("captions")[0];
+                preview_captions.innerHTML = captions.getAttribute("transcript");
             }
         }
         else{
@@ -102,7 +109,7 @@ function timeRender(time){
         if ((time >= start_time) && (time <= end_time)){
             vseg_v_rect.style.borderLeft = "5px solid #FFDA6A";
        
-            if ((time < (parseFloat(start_time) + 0.1)) && (SPEAKING==false)){
+            if ((time < (parseFloat(start_time) + 0.2)) && (SPEAKING==false)){
                 // if described, preview video description
                 let description_edits = vseg_v_rect.parentNode.getElementsByClassName("description-edit");
                 let seg_id = vseg_v_rect.getAttribute("seg_id");
@@ -119,7 +126,7 @@ function timeRender(time){
                             window.speechSynthesis.speak(msg);
                             msg.onend = function(event){
                                 player.playVideo();
-                                SPEAKING = false;
+                                setTimeout(()=>{SPEAKING = false;}, 300)
                             }
                         }
                 }
@@ -136,14 +143,91 @@ function timeRender(time){
 // gradient color change
 // c1, c2 = [r,g,b]
 // val 0-1
-function gradient_color(val, c1, c2){
-    color = [0,0,0];
-    color[0] = c1[0] + val * (c2[0] - c1[0]);
-    color[1] = c1[1] + val * (c2[1] - c1[1]);
-    color[2] = c1[2] + val * (c2[2] - c1[2]);
-    color_str = "rgb(" + color[0].toString() + "," + color[1].toString() + "," + color[2].toString() + ")"
-    return color_str
+
+function gradient_color(mix, c1, c2)
+{
+   //Invert sRGB gamma compression
+   c1 = InverseSrgbCompanding(c1);
+   c2 = InverseSrgbCompanding(c2);
+
+   r = c1[0]*(1-mix) + c2[0]*(mix);
+   g = c1[1]*(1-mix) + c2[1]*(mix);
+   b = c1[2]*(1-mix) + c2[2]*(mix);
+
+   //Reapply sRGB gamma compression
+   result = SrgbCompanding([r,g,b]);
+
+   return result;
 }
+
+function InverseSrgbCompanding(c)
+{
+    //Convert color from 0..255 to 0..1
+    r = c[0] / 255;
+    g = c[1] / 255;
+    b = c[2] / 255;
+
+    //Inverse Red, Green, and Blue
+    if (r > 0.04045) {r = Math.pow((r+0.055)/1.055, 2.4)} else {r = r / 12.92;}
+    if (g > 0.04045) {g = Math.pow((g+0.055)/1.055, 2.4)} else {g = g / 12.92;}
+    if (b > 0.04045) {b = Math.pow((b+0.055)/1.055, 2.4)} else {b = b / 12.92;}
+
+    //return new color. Convert 0..1 back into 0..255
+    result_r = r*255;
+    result_g = g*255;
+    result_b = b*255;
+
+    return [result_r, result_g, result_b];
+}
+
+function SrgbCompanding(c)
+{
+    //Convert color from 0..255 to 0..1
+    r = c[0] / 255;
+    g = c[1] / 255;
+    b = c[2] / 255;
+
+    //Apply companding to Red, Green, and Blue
+    if (r > 0.0031308) {r = 1.055*Math.pow(r, 1/2.4)-0.055} else {r = r * 12.92};
+    if (g > 0.0031308) {g = 1.055*Math.pow(g, 1/2.4)-0.055} else {g = g * 12.92};
+    if (b > 0.0031308) {b = 1.055*Math.pow(b, 1/2.4)-0.055} else {b = b * 12.92};
+
+    //return new color. Convert 0..1 back into 0..255
+    result_r = r*255;
+    result_g = g*255;
+    result_b = b*255;
+
+    return "rgb(" + 
+    result_r.toString() + "," + 
+    result_g.toString() + "," + 
+    result_b.toString() + ")";
+}
+
+
+
+// function gradient_color(weight, color2, color1) {
+//     var w1 = weight;
+//     var w2 = 1 - w1;
+//     var rgb = "rgb(" + 
+//                 Math.round(color1[0] * w1 + color2[0] * w2).toString() + "," + 
+//                 Math.round(color1[1] * w1 + color2[1] * w2).toString() + "," + 
+//                 Math.round(color1[2] * w1 + color2[2] * w2).toString() + ")"
+//     return rgb;
+// }
+
+// function gradient_color(val, c1, c2){
+//     color = [0,0,0];
+//     color[0] = c1[0] + val * (c2[0] - c1[0]);
+//     color[1] = c1[1] + val * (c2[1] - c1[1]);
+//     color[2] = c1[2] + val * (c2[2] - c1[2]);
+//     color_str = "rgb(" + color[0].toString() + "," + color[1].toString() + "," + color[2].toString() + ")"
+//     return color_str
+// }
+
+
+
+
+
 
 // for visual segments
 var visual_seg_rects = document.getElementsByClassName("v-timeline-rect");
@@ -870,22 +954,34 @@ function reloadDescriptionCol(threshold){
 }
 
 // Select filter threshold
-let dropdown_items = document.getElementsByClassName("dropdown-threshold");
-for (var i = 0; i < dropdown_items.length; i++) {
-    dropdown_items.item(i).addEventListener("click", (e) => {
-        let threshold = e.target.getAttribute("threshold");
-        // reload description list
-        reloadDescriptionCol(threshold);
+var slider = document.getElementById("myRange");
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  reloadDescriptionCol(this.value * 0.01);
+  update_num_problems();
 
-        // highlight current threshold
-        for (var j = 0; j < dropdown_items.length; j++) {
-            dropdown_items.item(j).classList.remove("active");
-        }
-        e.target.classList.add("active");
-
-        update_num_problems();
-    });
+  // update filter number
+  let filter_num = document.getElementById("filter-num");
+  filter_num.innerText = this.value;
 }
+
+
+// let dropdown_items = document.getElementsByClassName("dropdown-threshold");
+// for (var i = 0; i < dropdown_items.length; i++) {
+//     dropdown_items.item(i).addEventListener("click", (e) => {
+//         let threshold = e.target.getAttribute("threshold");
+//         // reload description list
+//         reloadDescriptionCol(threshold);
+
+//         // highlight current threshold
+//         for (var j = 0; j < dropdown_items.length; j++) {
+//             dropdown_items.item(j).classList.remove("active");
+//         }
+//         e.target.classList.add("active");
+
+//         update_num_problems();
+//     });
+// }
 
 
 
@@ -906,3 +1002,18 @@ function update_num_problems(){
     description_num_problems.innerHTML = v_count;
 }
 update_num_problems();
+
+
+
+
+// press p to pause/play
+window.addEventListener('keydown', function (e) {
+    if (e.keyCode == 18) {
+        if ((player.getPlayerState() == 2) || (player.getPlayerState() == -1)){
+            player.playVideo();
+        }
+        else if (player.getPlayerState() == 1){
+            player.pauseVideo();
+        }
+    }
+  });
