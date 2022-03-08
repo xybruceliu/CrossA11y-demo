@@ -1,0 +1,25 @@
+audio_seg_id,subject,start,end,raw_subject
+0,NON-SPEECH,0.0,10.98,NON-SPEECH
+1,let 's start casement windows,10.98,12.98,let's start with casement windows
+2,measure width window base extend tape measure horizontally jamb jammed trim,12.98,18.73,measure the width of the window at the base extend your tape measure horizontally from jamb to jammed or trim to
+3,trim,18.73,20.7,trim to
+4,measure height casement window extend tape measure vertically header cell drywall sill,20.7,27.52,measure the height of a casement window extend your tape measure vertically from header to cell or drywall sill
+5,sure capture width height measurements,27.52,29.959999999999997,be sure to capture both width and height measurements
+6,NON-SPEECH,29.959999999999997,33.389999,NON-SPEECH
+7,let 's look measure double single hung window measure width window center two sashes meet extend tape measure horizontally jamb,33.389999,43.03,now let's look at how to measure a double or single hung window measure the width of the window at the center where the two sashes meet extend your tape measure horizontally from jamb to
+8,trim trim,43.03,45.09,or trim to trim
+9,measure height double single hung window extend tape measure vertically header drywall sill,45.09,51.549999,to measure the height of a double or single hung window extend your tape measure vertically from header to or drywall to sill
+10,sure capture width height measurements,51.549999,54.139999,be sure to capture both width and height measurements
+11,NON-SPEECH,54.139999,57.81,NON-SPEECH
+12,measure sliding patio 'll step outside 're looking exterior,57.81,63.17,to measure a sliding patio door you'll want to step outside so you're looking at the exterior of the door
+13,measure width center,63.17,65.53,measure the width of the door at the center
+14,depending style home extend tape measure horizontally brick brick siding siding edge stucco edge stucco,65.53,74.18,depending on your style of home extend your tape measure horizontally from brick to brick siding the siding or one edge of stucco to the other edge of stucco
+15,measure height sliding patio extend tape measure vertically depending style home measure header bottom sill siding bottom sill edge stucco bottom sill sure capture width height measurements,74.18,90.219999,to measure the height of a sliding patio door extend your tape measure vertically again depending on the style of your home measure from the header to the bottom of the door sill siding to the bottom of the door sill or edge of the stucco to the bottom of the door sill be sure to capture both width and height measurements
+16,NON-SPEECH,90.219999,93.799999,NON-SPEECH
+17,let 's look measure hinge,93.799999,96.16,now let's look at how to measure a hinge door
+18,instructions apply front entry hinge doors hinge French patio doors,96.16,101.0,these instructions will apply to front entry hinge doors and hinge French patio doors
+19,measure width center horizontally panel,101.0,107.0,measure the width of the door at the center horizontally from one end of the door panel to the other
+20,measure height extend tape measure vertically panel,107.0,112.04,to measure the height of the door extend your tape measure vertically from one end of the door panel to the other
+21,NON-SPEECH,112.04,115.01,NON-SPEECH
+22,sure capture width height measurements,115.01,117.88000000000001,be sure to capture both width and height measurements you
+23,NON-SPEECH,117.88000000000001,127.0,NON-SPEECH

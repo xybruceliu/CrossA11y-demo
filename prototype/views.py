@@ -50,7 +50,7 @@ def add(request, video_id):
     df_vt_matches = pd.read_csv("prototype/static/test/" + video_id + "_combined_vt_scores_matrix_filtered.csv", index_col=0)
     arr_vt_matches = df_vt_matches.to_numpy()
 
-    df_va_matches = pd.read_csv("prototype/static/test/" + video_id + "_mmv_va_scores_matrix_filtered.csv", index_col=0)
+    df_va_matches = pd.read_csv("prototype/static/test/" + video_id + "_combined_va_scores_matrix_filtered.csv", index_col=0)
     arr_va_matches = df_va_matches.to_numpy()
 
     # get video length to compute % of segment
@@ -71,7 +71,9 @@ def add(request, video_id):
                                  match_scores = json.dumps(list(arr_vt_matches[i,:])),
                                  score = vt_all_scores[i],
                                  norm_score = vt_norm_socres[i],
-                                 detected_visuals = row["visual_feedback"]
+                                 detected_visuals = row["visual_feedback"],
+                                 detected_texts = row["text_detection"],
+                                 presenter_detection = row["presenter_detection"],
                                  )
 
     # add all audio segs
@@ -80,7 +82,7 @@ def add(request, video_id):
     for i, row in df_audio_seg.iterrows():
 
         # if it's non-speech, use va score to see how much does the sound makes sense
-        if (row["subject"] == "NON-SPEECH"):
+        if (row["raw_subject"] == "NON-SPEECH"):
             AudioSeg.objects.create(video_id=video_id,
                                     seg_id=row["audio_seg_id"],
                                     start_time=row["start"],
@@ -91,7 +93,7 @@ def add(request, video_id):
                                     match_scores = json.dumps(list(arr_vt_matches[:,i])),
                                     score = va_all_scores[i],
                                     norm_score = va_norm_socres[i],
-                                    transcript = row["subject"]
+                                    transcript = row["raw_subject"]
                                     )
                 
         # if has speech, give weight 1
@@ -106,7 +108,7 @@ def add(request, video_id):
                                     match_scores = json.dumps(list(arr_vt_matches[:,i])),
                                     score = va_all_scores[i],
                                     norm_score = 1,
-                                    transcript = row["subject"]
+                                    transcript = row["raw_subject"]
                                     )
             
     return HttpResponse(video_id + " successfully added!")

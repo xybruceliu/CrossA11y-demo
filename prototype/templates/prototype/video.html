@@ -199,7 +199,7 @@
         </div>
 
         <div id="description-div">
-          <!-- Default threshold = 0.25 -->
+          <!-- Default threshold = 0.50 -->
           {% for visual_seg in visual_segs %}
 
             
@@ -212,7 +212,10 @@
               score="{{visual_seg.score}}"
               norm_score="{{visual_seg.norm_score}}"
               match_scores="{{visual_seg.match_scores}}"
-              detected_visuals="{{visual_seg.detected_visuals}}"></div>
+              detected_visuals="{{visual_seg.detected_visuals}}"
+              detected_texts="{{visual_seg.detected_texts}}"
+              presenter_detection="{{visual_seg.presenter_detection}}"
+              ></div>
 
               <div class="input-group description description-edit" 
               video_id="{{visual_seg.video_id}}"

@@ -205,29 +205,6 @@ function SrgbCompanding(c)
 
 
 
-// function gradient_color(weight, color2, color1) {
-//     var w1 = weight;
-//     var w2 = 1 - w1;
-//     var rgb = "rgb(" + 
-//                 Math.round(color1[0] * w1 + color2[0] * w2).toString() + "," + 
-//                 Math.round(color1[1] * w1 + color2[1] * w2).toString() + "," + 
-//                 Math.round(color1[2] * w1 + color2[2] * w2).toString() + ")"
-//     return rgb;
-// }
-
-// function gradient_color(val, c1, c2){
-//     color = [0,0,0];
-//     color[0] = c1[0] + val * (c2[0] - c1[0]);
-//     color[1] = c1[1] + val * (c2[1] - c1[1]);
-//     color[2] = c1[2] + val * (c2[2] - c1[2]);
-//     color_str = "rgb(" + color[0].toString() + "," + color[1].toString() + "," + color[2].toString() + ")"
-//     return color_str
-// }
-
-
-
-
-
 
 // for visual segments
 var visual_seg_rects = document.getElementsByClassName("v-timeline-rect");
@@ -237,7 +214,13 @@ for (var i = 0; i < visual_seg_rects.length; i++) {
     var visual_seg_rect = visual_seg_rects[i];
     var norm_score = visual_seg_rect.getAttribute("norm_score");
 
-    visual_seg_rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+    // by default show the top 25% problems with color
+    if (norm_score > 0.25){
+        visual_seg_rect.style.fill = gradient_color(1, COLOR1, COLOR2);
+    }
+    else{
+        visual_seg_rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+    }
 
     // click time of each question to jump to video time
     visual_seg_rects.item(i).addEventListener("click", (e) => {
@@ -472,6 +455,13 @@ for (var i = 0; i < vseg_v_rects.length; i++) {
     
     vseg_v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
 
+    // presenter detection
+    if (vseg_v_rect.getAttribute("presenter_detection") > 350000){
+        console.log("ha")
+        let form = vseg_v_rect.parentNode.getElementsByClassName("form-control")[0];
+        form.setAttribute("placeholder", "Likely to be a host speaking, may dismiss")
+    }
+
     // on hover
     vseg_v_rect.addEventListener("mouseover", (e) => {
         e.target.style.transform = "scale(1.2)";
@@ -497,6 +487,7 @@ for (var i = 0; i < vseg_v_rects.length; i++) {
     });
 }
 
+// default 25%
 reloadDescriptionCol(0.25)
 
 
@@ -757,7 +748,6 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             wrapper.innerHTML='<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
 
             var detected_visuals = v_rect.getAttribute("detected_visuals").split("),");
-            console.log(detected_visuals)
 
            
 
@@ -957,12 +947,29 @@ function reloadDescriptionCol(threshold){
 var slider = document.getElementById("myRange");
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
-  reloadDescriptionCol(this.value * 0.01);
-  update_num_problems();
+    // update video descripiton problems
+    reloadDescriptionCol(this.value * 0.01);
+    update_num_problems();
 
-  // update filter number
-  let filter_num = document.getElementById("filter-num");
-  filter_num.innerText = this.value;
+    // update horizontal visual timeline color
+    // for visual segments
+    var visual_seg_rects = document.getElementsByClassName("v-timeline-rect");
+    for (var i = 0; i < visual_seg_rects.length; i++) {
+        // assign color based on accessibility score
+        var visual_seg_rect = visual_seg_rects[i];
+        var norm_score = visual_seg_rect.getAttribute("norm_score");
+        // by default show the top % problems with color
+        if (norm_score > (this.value * 0.01)){
+            visual_seg_rect.style.fill = gradient_color(1, COLOR1, COLOR2);
+        }
+        else{
+            visual_seg_rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+        }
+    }
+
+    // update filter number
+    let filter_num = document.getElementById("filter-num");
+    filter_num.innerText = this.value;
 }
 
 
