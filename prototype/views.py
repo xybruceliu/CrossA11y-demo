@@ -36,8 +36,25 @@ def video(request, video_id):
 
 
 # get video detail
-def video_detail(request, video_id):
-    pass
+def v2(request, video_id):
+    visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
+    audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
+    words = Word.objects.all().filter(video_id=video_id)
+    problems = Problem.objects.all().filter(video_id=video_id)
+
+    transcript_list = [audio_seg.transcript for audio_seg in audio_segs]
+    transcript = ". ".join(transcript_list)
+
+    context = {
+        'video_id': video_id,
+        'visual_segs': visual_segs,
+        'audio_segs': audio_segs, 
+        'words': words,
+        'problems': problems,
+        'transcript': transcript
+    }
+
+    return render(request, 'prototype/video_v2.html', context)
 
 
 # Process and add a video's info to db

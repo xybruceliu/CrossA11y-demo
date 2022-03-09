@@ -1,0 +1,141 @@
+/* 
+gray #999999
+red #ff3b30 	rgb(255, 59, 48)
+green #4cd964 rgb(76, 217, 100)
+blue #007aff 	rgb(0, 122, 255)
+*/
+#youtube-video {
+  margin-top: 50px;
+}
+
+
+.v-timeline-svg:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.a-timeline-svg:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+#vl-parent {
+  position: relative; 
+  left: 0%;
+}
+
+#vl {
+  position: absolute; 
+  margin-top: 50px;
+  width: 2px; 
+  height: 120px; 
+  background-color: rgb(171, 171, 171); 
+  z-index: auto;
+}
+
+.timeline{
+  margin-top: 30px;
+}
+
+.preview{
+  margin-top: 60px;
+}
+
+#preview-captions{
+  margin-top: 10px;
+  font-size: large;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+
+.v-timestamp{
+  margin-top: 5px;
+}
+
+
+.v-timestamp:hover {
+  cursor: pointer;
+}
+
+
+.aseg{
+  display: flex;
+  height: max-content;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.aseg-v-rect{
+  width: 20px;
+}
+
+.aseg-v-rect:hover {
+  cursor: pointer;
+}
+
+.captions {
+  height: auto;
+  width: 100%;
+  margin-left: 10px;
+}
+
+#captions-header
+{
+  display: flex;
+}
+
+
+#description-header
+{
+  display: flex;
+}
+.slider
+{
+  margin-top: 7%;
+  margin-left: 20%;
+}
+
+#filter-text{
+  margin-left: 20%;
+}
+
+.vseg{
+  display: flex;
+  height: max-content;
+  width: 100%;
+  /* margin-top: 30px; */
+}
+
+.vseg-v-rect{
+  width: 20px;
+}
+
+.vseg-v-rect:hover {
+  cursor: pointer;
+}
+
+.description {
+  height: auto;
+  width: 100%;
+  margin-left: 10px;
+}
+
+
+.dropdown-item:hover{
+  cursor: pointer;
+}
+
+
+.number-problems{
+  color: gray;
+}
+
+
+/* .detected-visual-entity:hover{
+  cursor: pointer;
+  text-decoration: underline;
+} */

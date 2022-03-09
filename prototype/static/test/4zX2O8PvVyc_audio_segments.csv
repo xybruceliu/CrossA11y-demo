@@ -19,7 +19,6 @@ audio_seg_id,subject,start,end,raw_subject
 17,let 's look measure hinge,93.799999,96.16,now let's look at how to measure a hinge door
 18,instructions apply front entry hinge doors hinge French patio doors,96.16,101.0,these instructions will apply to front entry hinge doors and hinge French patio doors
 19,measure width center horizontally panel,101.0,107.0,measure the width of the door at the center horizontally from one end of the door panel to the other
-20,measure height extend tape measure vertically panel,107.0,112.04,to measure the height of the door extend your tape measure vertically from one end of the door panel to the other
-21,NON-SPEECH,112.04,115.01,NON-SPEECH
-22,sure capture width height measurements,115.01,117.88000000000001,be sure to capture both width and height measurements you
-23,NON-SPEECH,117.88000000000001,127.0,NON-SPEECH
+20,measure height extend tape measure vertically panel,107.0,115.01,to measure the height of the door extend your tape measure vertically from one end of the door panel to the other
+21,sure capture width height measurements,115.01,117.88000000000001,be sure to capture both width and height measurements you
+22,NON-SPEECH,117.88000000000001,127.0,NON-SPEECH

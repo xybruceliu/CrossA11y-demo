@@ -363,7 +363,7 @@ for (var i = 0; i < aseg_v_rects.length; i++) {
     var aseg_v_rect = aseg_v_rects[i];
     var norm_score = aseg_v_rect.getAttribute("norm_score");
     
-    aseg_v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
+    // aseg_v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
 
     // on hover
     aseg_v_rect.addEventListener("mouseover", (e) => {
