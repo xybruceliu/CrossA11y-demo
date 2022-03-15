@@ -28,13 +28,12 @@ audio_seg_id,subject,start,end,raw_subject
 26,seven eight,132.84,135.05,seven eight
 27,three,135.05,136.59,three
 28,really good pizza reviews today traditional football style pelham pizza pelham westchester lot good pizza,136.59,145.119999,really good pizza reviews today all traditional all football style pelham pizza pelham westchester a lot of good pizza
-29,yeah 're awesome 's,145.119999,145.89999999999998,yeah you're awesome he's
-30,NON-SPEECH,145.89999999999998,148.52999999999997,NON-SPEECH
-31,'s,148.52999999999997,149.84,he's the
-32,worst got shot boy course,149.84,153.33,worst they got a shot for my boy of course
-33,yeah 's brock brock,153.33,155.59,yeah that's brock brock
-34,,155.59,157.7,you
-35,see brock,157.7,159.56999899999997,do you see this brock
-36,look brock brock brock like camera 're cute brock,159.56999899999997,163.89,look at that brock brock the brock like on camera you're so cute brock
-37,'s perfect thanks brother,163.89,165.94,that's perfect name for him so thanks brother you
-38,NON-SPEECH,165.94,172.0,NON-SPEECH
+29,yeah 're awesome 's,145.119999,148.52999999999997,yeah you're awesome he's
+30,'s,148.52999999999997,149.84,he's the
+31,worst got shot boy course,149.84,153.33,worst they got a shot for my boy of course
+32,yeah 's brock brock,153.33,155.59,yeah that's brock brock
+33,,155.59,157.7,you
+34,see brock,157.7,159.56999899999997,do you see this brock
+35,look brock brock brock like camera 're cute brock,159.56999899999997,163.89,look at that brock brock the brock like on camera you're so cute brock
+36,'s perfect thanks brother,163.89,165.94,that's perfect name for him so thanks brother you
+37,NON-SPEECH,165.94,172.0,NON-SPEECH

@@ -8,48 +8,44 @@ audio_seg_id,subject,start,end,raw_subject
 6,easy know I like nice messy honest I n't perfectly formed burger,51.279999000000004,57.9,this is easy out you know I like them nice and messy to be honest with you I don't want a perfectly formed burger
 7,'s 's backyard,57.9,59.96,it's not what it's about in your backyard
 8,alright 've got patties formed,59.96,62.809999,alright now that we've got these patties formed
-9,I 'm gon season beef rub church holy cow,62.809999,66.3,I'm gonna season it with my beef rub which is church holy cow
-10,NON-SPEECH,66.3,68.46000000000001,NON-SPEECH
-11,,68.46000000000001,69.67,this is a
-12,perfect blend,69.67,72.19999899999999,perfect blend of
-13,coarse black crack pepper,72.19999899999999,74.89999900000001,coarse black crack pepper
-14,kosher salt,74.89999900000001,77.11,kosher salt
-15,onion,77.11,79.15,of onion
-16,touch paprika,79.15,81.66,just a touch of paprika
-17,flip season sides,81.66,83.85,flip these over and season both sides
-18,NON-SPEECH,83.85,86.9,NON-SPEECH
-19,'s nice little even application,86.9,90.719999,it's a nice little even application
-20,'re gon good go,90.719999,93.09,and we're gonna be good to go
-21,'re gon grill 's lot latitude grill really really easy know I like go 375 degrees,93.09,101.17,so we're gonna take these out to the grill there's a lot of latitude with how you how you grill these really really easy you know I like to go about 375 degrees
-22,go 450 go high grill cook even quicker kind,101.17,106.969999,you can go up to 450 go up to high on your grill if you want to cook them even quicker just kind of up to you
-23,'ve got seasoned let 's go outside,106.969999,109.66,so now that we've got these seasoned up let's go outside
-24,NON-SPEECH,109.66,112.82,NON-SPEECH
-25,okay guys 're Timberline 375 degrees gon put patties,112.82,117.72999999999999,okay guys so we're here with our Timberline its 375 degrees gonna put these patties on
-26,NON-SPEECH,117.72999999999999,119.889999,NON-SPEECH
-27,know 's lot latitude hamburger well recommendation cook ground beef 165,119.889999,124.309999,you know there's a lot of latitude on the hamburger as well the recommendation is to cook ground beef 165
-28,degrees I personally n't like cook quite far get choose done case,124.309999,131.37,degrees I personally don't like it cook quite that far but you get to choose how done you want these in any case
-29,375 probably gon know 15 minutes max depending liking I 'll flip time cook 's,131.37,139.159999,the 375 these are probably gonna take you know 15 minutes max depending on your liking and I'll flip them one time during the cook that's it
-30,NON-SPEECH,139.159999,142.32,NON-SPEECH
-31,burgers done,142.32,145.289999,these burgers are done
-32,I like cheese,145.289999,148.86,but I like cheese so
-33,okay,148.86,148.89000000000001,okay
-34,NON-SPEECH,148.89000000000001,152.46,NON-SPEECH
-35,guys cheese ought melted whew,152.46,154.61,guys this cheese ought to be melted whew
-36,perfection,154.61,155.45000000000002,perfection
-37,NON-SPEECH,155.45000000000002,159.219999,NON-SPEECH
-38,okay let 's go dress,159.219999,161.67000000000002,okay let's go dress them up
-39,okay guys 're grill 've toasted couple buns five minutes Traeger 're ready dress I like put lettuce bottom buns,161.67000000000002,173.38,okay guys so we're in off the grill we've toasted a couple buns for about five minutes on the Traeger and we're ready to dress them up so I like to put my lettuce on the bottom of my buns
-40,kind acts bib catch sort juices might know run meat 've cooked,173.38,180.26,and kind of acts as a bib to catch any sort of juices it might you know run out of your meat that you've cooked
-41,put whatever heck,180.26,183.13,and then you to put whatever the heck you want
-42,hamburger,183.13,185.18,on your hamburger
-43,classic little red onion,185.18,188.83,the classic has a little red onion for me
-44,n't sleep pickles,188.83,190.82,don't sleep on the pickles
-45,get good even pickle distribution,190.82,194.639999,get a good even pickle distribution
-46,put,194.639999,195.63,and you put what you want
-47,NON-SPEECH,195.63,197.77,NON-SPEECH
-48,buns,197.77,198.34000000000003,on the buns
-49,NON-SPEECH,198.34000000000003,200.41,NON-SPEECH
-50,perfect I super easy American classic,200.41,205.64,perfect I was super easy the American classic
-51,pickles going,205.64,207.98,and our pickles going there with it
-52,'ve got feast guys recipe go trigger grills comm slash recipes download app,207.98,215.08,you've got yourself a feast so if you guys want the recipe just go to trigger grills comm slash recipes or you can download the app
-53,NON-SPEECH,215.08,220.0,NON-SPEECH
+9,I 'm gon season beef rub church holy cow,62.809999,68.46000000000001,I'm gonna season it with my beef rub which is church holy cow
+10,,68.46000000000001,69.67,this is a
+11,perfect blend,69.67,72.19999899999999,perfect blend of
+12,coarse black crack pepper,72.19999899999999,74.89999900000001,coarse black crack pepper
+13,kosher salt,74.89999900000001,77.11,kosher salt
+14,onion,77.11,79.15,of onion
+15,touch paprika,79.15,81.66,just a touch of paprika
+16,flip season sides,81.66,83.85,flip these over and season both sides
+17,NON-SPEECH,83.85,86.9,NON-SPEECH
+18,'s nice little even application,86.9,90.719999,it's a nice little even application
+19,'re gon good go,90.719999,93.09,and we're gonna be good to go
+20,'re gon grill 's lot latitude grill really really easy know I like go 375 degrees,93.09,101.17,so we're gonna take these out to the grill there's a lot of latitude with how you how you grill these really really easy you know I like to go about 375 degrees
+21,go 450 go high grill cook even quicker kind,101.17,106.969999,you can go up to 450 go up to high on your grill if you want to cook them even quicker just kind of up to you
+22,'ve got seasoned let 's go outside,106.969999,109.66,so now that we've got these seasoned up let's go outside
+23,NON-SPEECH,109.66,112.82,NON-SPEECH
+24,okay guys 're Timberline 375 degrees gon put patties,112.82,119.889999,okay guys so we're here with our Timberline its 375 degrees gonna put these patties on
+25,know 's lot latitude hamburger well recommendation cook ground beef 165,119.889999,124.309999,you know there's a lot of latitude on the hamburger as well the recommendation is to cook ground beef 165
+26,degrees I personally n't like cook quite far get choose done case,124.309999,131.37,degrees I personally don't like it cook quite that far but you get to choose how done you want these in any case
+27,375 probably gon know 15 minutes max depending liking I 'll flip time cook 's,131.37,139.159999,the 375 these are probably gonna take you know 15 minutes max depending on your liking and I'll flip them one time during the cook that's it
+28,NON-SPEECH,139.159999,142.32,NON-SPEECH
+29,burgers done,142.32,145.289999,these burgers are done
+30,I like cheese,145.289999,148.86,but I like cheese so
+31,okay,148.86,148.89000000000001,okay
+32,NON-SPEECH,148.89000000000001,152.46,NON-SPEECH
+33,guys cheese ought melted whew,152.46,154.61,guys this cheese ought to be melted whew
+34,perfection,154.61,155.45000000000002,perfection
+35,NON-SPEECH,155.45000000000002,159.219999,NON-SPEECH
+36,okay let 's go dress,159.219999,161.67000000000002,okay let's go dress them up
+37,okay guys 're grill 've toasted couple buns five minutes Traeger 're ready dress I like put lettuce bottom buns,161.67000000000002,173.38,okay guys so we're in off the grill we've toasted a couple buns for about five minutes on the Traeger and we're ready to dress them up so I like to put my lettuce on the bottom of my buns
+38,kind acts bib catch sort juices might know run meat 've cooked,173.38,180.26,and kind of acts as a bib to catch any sort of juices it might you know run out of your meat that you've cooked
+39,put whatever heck,180.26,183.13,and then you to put whatever the heck you want
+40,hamburger,183.13,185.18,on your hamburger
+41,classic little red onion,185.18,188.83,the classic has a little red onion for me
+42,n't sleep pickles,188.83,190.82,don't sleep on the pickles
+43,get good even pickle distribution,190.82,194.639999,get a good even pickle distribution
+44,put,194.639999,197.77,and you put what you want
+45,buns,197.77,200.41,on the buns
+46,perfect I super easy American classic,200.41,205.64,perfect I was super easy the American classic
+47,pickles going,205.64,207.98,and our pickles going there with it
+48,'ve got feast guys recipe go trigger grills comm slash recipes download app,207.98,215.08,you've got yourself a feast so if you guys want the recipe just go to trigger grills comm slash recipes or you can download the app
+49,NON-SPEECH,215.08,220.0,NON-SPEECH

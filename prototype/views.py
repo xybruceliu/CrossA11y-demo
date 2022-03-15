@@ -13,29 +13,12 @@ from django.views.decorators.csrf import csrf_protect
 def index(request):
     return HttpResponse("Hello, world.")
 
-# another view video_detail
-def video(request, video_id):
-    visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
-    audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
-    words = Word.objects.all().filter(video_id=video_id)
-    problems = Problem.objects.all().filter(video_id=video_id)
 
-    transcript_list = [audio_seg.transcript for audio_seg in audio_segs]
-    transcript = ". ".join(transcript_list)
+# level 1
+def v1(request, video_id):
+    return HttpResponse("v1")
 
-    context = {
-        'video_id': video_id,
-        'visual_segs': visual_segs,
-        'audio_segs': audio_segs, 
-        'words': words,
-        'problems': problems,
-        'transcript': transcript
-    }
-
-    return render(request, 'prototype/video.html', context)
-
-
-# get video detail
+# level 2
 def v2(request, video_id):
     visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
     audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
@@ -55,6 +38,28 @@ def v2(request, video_id):
     }
 
     return render(request, 'prototype/video_v2.html', context)
+
+
+# level 3
+def v3(request, video_id):
+    visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
+    audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
+    words = Word.objects.all().filter(video_id=video_id)
+    problems = Problem.objects.all().filter(video_id=video_id)
+
+    transcript_list = [audio_seg.transcript for audio_seg in audio_segs]
+    transcript = ". ".join(transcript_list)
+
+    context = {
+        'video_id': video_id,
+        'visual_segs': visual_segs,
+        'audio_segs': audio_segs, 
+        'words': words,
+        'problems': problems,
+        'transcript': transcript
+    }
+
+    return render(request, 'prototype/video_v3.html', context)
 
 
 # Process and add a video's info to db
@@ -208,4 +213,7 @@ def describe_visual(request, video_id, seg_id):
 
 # Helper: normalizaiton
 def normalize(data):
-    return (data - np.min(data)) / (np.max(data) - np.min(data))
+    if np.max(data) == np.min(data):
+        return np.ones(len(data))
+    else:
+        return (data - np.min(data)) / (np.max(data) - np.min(data))

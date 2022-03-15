@@ -453,7 +453,7 @@ for (var i = 0; i < vseg_v_rects.length; i++) {
     // presenter detection
     if (vseg_v_rect.getAttribute("presenter_detection") > 350000){
         let form = vseg_v_rect.parentNode.getElementsByClassName("form-control")[0];
-        form.setAttribute("placeholder", "Likely to be a host speaking, may dismiss")
+        form.setAttribute("placeholder", "Likely to be a host speaking")
     }
 
     // on hover
@@ -565,75 +565,97 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
     });
 
     // Dismiss
-    let dismiss_button = captions_edit_buttons[i].parentNode.getElementsByClassName("btn-dismiss")[0];
-    dismiss_button.addEventListener("click", (e)=>{
-        let caption_div = e.target.parentNode.parentNode.parentNode;
+    let dismiss_buttons = captions_edit_buttons[i].parentNode.getElementsByClassName("btn-dismiss");
+    for (let dismiss_button of dismiss_buttons){
+        
+        dismiss_button.addEventListener("click", (e)=>{
+            let captions_div = e.target.parentNode.parentNode.parentNode;
 
-        // if not yet dismissed
-        if (caption_div.getAttribute("dismissed") == "false"){
-            let seg_id = caption_div.getAttribute("seg_id");
+            // if not yet dismissed
+            if (captions_div.getAttribute("dismissed") == "false"){
+                let seg_id = captions_div.getAttribute("seg_id");
 
-            // Set dismissed attribute to true
-            caption_div.setAttribute("dismissed", "true");
-            
-            // Set editing attribute to false
-            caption_div.setAttribute("editing", "false");
+                // Set dismissed attribute to true
+                captions_div.setAttribute("dismissed", "true");
+                
+                // Set editing attribute to false
+                captions_div.setAttribute("editing", "false");
 
-            // Change color of vertical timeline
-            var v_rect = document.getElementById("aseg"+seg_id);
-            v_rect.style.backgroundColor = "#adb5bd";
+                // Change color of vertical timeline
+                var v_rect = document.getElementById("aseg"+seg_id);
+                v_rect.style.backgroundColor = "rgb(173,181,189)";
 
-            // Change color in the 1st col
-            var rect = document.getElementById("a"+seg_id);
-            rect.style.fill = "#adb5bd";
+                // Change color in the 1st col
+                var rect = document.getElementById("a"+seg_id);
+                rect.style.fill = "rgb(173,181,189)";
 
-            // Clear textarea text and disable it
-            let textarea = caption_div.getElementsByTagName("textarea")[0];
-            textarea.value = "";
-            textarea.setAttribute("disabled", true);
+                // Clear textarea text and disable it
+                let textarea = captions_div.getElementsByTagName("textarea")[0];
+                textarea.value = "";
+                textarea.setAttribute("disabled", true);
 
-            // Disable Save button
-            let edit_button = caption_div.getElementsByClassName("btn-edit")[0];
-            edit_button.setAttribute("disabled", true);
+                // Disable Save button
+                let edit_button = captions_div.getElementsByClassName("btn-edit")[0];
+                edit_button.setAttribute("disabled", true);
 
-            // Change dismiss button to undismiss
-            dismiss_button.innerHTML = "Undismiss";
+                // Change dismiss button to undismiss
+                for (let dismiss_button_1 of dismiss_buttons){
+                    dismiss_button_1.style.display = "none";
+                }
+                dismiss_button.parentNode.parentNode.getElementsByClassName("btn-undismiss")[0].style.display = "";
 
-        }
+            }
 
-        // if already dismissed
-        else{
-            let seg_id = caption_div.getAttribute("seg_id");
+            update_num_problems();
+        });
+    }
 
-            // Set dismissed attribute to true
-            caption_div.setAttribute("dismissed", "false");
-            
-            // Set editing attribute to false
-            caption_div.setAttribute("editing", "true");
 
-            // Change color of vertical timeline
-            var norm_score = caption_div.getAttribute("norm_score");
-            var v_rect = document.getElementById("aseg"+seg_id);
-            v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
+    // Undismiss
+    let undismiss_buttons = captions_edit_buttons[i].parentNode.getElementsByClassName("btn-undismiss");
+    for (let undismiss_button of undismiss_buttons){
 
-            // Change color in the 1st col
-            var rect = document.getElementById("a"+seg_id);
-            rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+        undismiss_button.addEventListener("click", (e)=>{
+            let captions_div = e.target.parentNode.parentNode.parentNode;
 
-            // Clear textarea text and disable it
-            let textarea = caption_div.getElementsByTagName("textarea")[0];
-            textarea.removeAttribute("disabled");
+            // if already dismissed
+            if (captions_div.getAttribute("dismissed") == "true"){
 
-            // Disable Save button
-            let edit_button = caption_div.getElementsByClassName("btn-edit")[0];
-            edit_button.removeAttribute("disabled");
+                let seg_id = captions_div.getAttribute("seg_id");
 
-            // Change dismiss button to undismiss
-            dismiss_button.innerHTML = "Dismiss";
-        }
+                // Set dismissed attribute to true
+                captions_div.setAttribute("dismissed", "false");
+                
+                // Set editing attribute to false
+                captions_div.setAttribute("editing", "true");
 
-        update_num_problems();
-    });
+                // Change color of vertical timeline
+                var norm_score = captions_div.getAttribute("norm_score");
+                var v_rect = document.getElementById("aseg"+seg_id);
+                v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
+
+                // Change color in the 1st col
+                var rect = document.getElementById("a"+seg_id);
+                rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+
+                // Clear textarea text and disable it
+                let textarea = captions_div.getElementsByTagName("textarea")[0];
+                textarea.removeAttribute("disabled");
+
+                // Disable Save button
+                let edit_button = captions_div.getElementsByClassName("btn-edit")[0];
+                edit_button.removeAttribute("disabled");
+
+                // Change undismiss button to dismiss
+                for (let dismiss_button_1 of dismiss_buttons){
+                    dismiss_button_1.style.display = "";
+                }
+                undismiss_button.style.display = "none";
+
+            }
+            update_num_problems();
+        });
+    }
 }
 
 
@@ -676,8 +698,10 @@ const levenshteinDistance = (str1 = '', str2 = '') => {
     return track[str2.length][str1.length];
  };
 
+
 let description_edit_buttons = document.getElementById("description-div").getElementsByClassName("btn-edit");
 for (var i = 0; i < description_edit_buttons.length; i++) {
+    // Save and Edit
     description_edit_buttons[i].addEventListener("click", (e) =>{      
         let description_div = e.target.parentNode;
         let textarea = description_div.getElementsByTagName("textarea")[0];
@@ -726,9 +750,10 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             rect.style.fill = "#CFE2FF";
 
             // disable dismiss button
-            var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
-            dismiss_button.classList.add("disabled")
-
+            var dismiss_buttons = document.getElementsByClassName("btn-dismiss-visual-" + seg_id);
+            for (let dismiss_button of dismiss_buttons){
+                dismiss_button.classList.add("disabled");
+            }
 
 
             // Feedback
@@ -800,8 +825,10 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
 
             // enable dismiss button
-            var dismiss_button = document.getElementById("describe-visual-dismiss-" + seg_id);
-            dismiss_button.classList.remove("disabled")
+            var dismiss_buttons = document.getElementsByClassName("btn-dismiss-visual-" + seg_id);
+            for (let dismiss_button of dismiss_buttons){
+                dismiss_button.classList.remove("disabled")
+            }
 
         }
 
@@ -809,75 +836,97 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
     });
     
     // Dismiss
-    let dismiss_button = description_edit_buttons[i].parentNode.getElementsByClassName("btn-dismiss")[0];
-    dismiss_button.addEventListener("click", (e)=>{
-        let description_div = e.target.parentNode.parentNode.parentNode;
+    let dismiss_buttons = description_edit_buttons[i].parentNode.getElementsByClassName("btn-dismiss");
+    for (let dismiss_button of dismiss_buttons){
+        
+        dismiss_button.addEventListener("click", (e)=>{
+            let description_div = e.target.parentNode.parentNode.parentNode;
 
-        // if not yet dismissed
-        if (description_div.getAttribute("dismissed") == "false"){
-            let seg_id = description_div.getAttribute("seg_id");
+            // if not yet dismissed
+            if (description_div.getAttribute("dismissed") == "false"){
+                let seg_id = description_div.getAttribute("seg_id");
 
-            // Set dismissed attribute to true
-            description_div.setAttribute("dismissed", "true");
-            
-            // Set editing attribute to false
-            description_div.setAttribute("editing", "false");
+                // Set dismissed attribute to true
+                description_div.setAttribute("dismissed", "true");
+                
+                // Set editing attribute to false
+                description_div.setAttribute("editing", "false");
 
-            // Change color of vertical timeline
-            var v_rect = document.getElementById("vseg"+seg_id);
-            v_rect.style.backgroundColor = "#adb5bd";
+                // Change color of vertical timeline
+                var v_rect = document.getElementById("vseg"+seg_id);
+                v_rect.style.backgroundColor = "rgb(173,181,189)";
 
-            // Change color in the 1st col
-            var rect = document.getElementById("v"+seg_id);
-            rect.style.fill = "#adb5bd";
+                // Change color in the 1st col
+                var rect = document.getElementById("v"+seg_id);
+                rect.style.fill = "rgb(173,181,189)";
 
-            // Clear textarea text and disable it
-            let textarea = description_div.getElementsByTagName("textarea")[0];
-            textarea.value = "";
-            textarea.setAttribute("disabled", true);
+                // Clear textarea text and disable it
+                let textarea = description_div.getElementsByTagName("textarea")[0];
+                textarea.value = "";
+                textarea.setAttribute("disabled", true);
 
-            // Disable Save button
-            let edit_button = description_div.getElementsByClassName("btn-edit")[0];
-            edit_button.setAttribute("disabled", true);
+                // Disable Save button
+                let edit_button = description_div.getElementsByClassName("btn-edit")[0];
+                edit_button.setAttribute("disabled", true);
 
-            // Change dismiss button to undismiss
-            dismiss_button.innerHTML = "Undismiss";
+                // Change dismiss button to undismiss
+                for (let dismiss_button_1 of dismiss_buttons){
+                    dismiss_button_1.style.display = "none";
+                }
+                dismiss_button.parentNode.parentNode.getElementsByClassName("btn-undismiss")[0].style.display = "";
 
-        }
+            }
 
-        // if already dismissed
-        else{
-            let seg_id = description_div.getAttribute("seg_id");
+            update_num_problems();
+        });
+    }
 
-            // Set dismissed attribute to true
-            description_div.setAttribute("dismissed", "false");
-            
-            // Set editing attribute to false
-            description_div.setAttribute("editing", "true");
 
-            // Change color of vertical timeline
-            var norm_score = description_div.getAttribute("norm_score");
-            var v_rect = document.getElementById("vseg"+seg_id);
-            v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
+    // Undismiss
+    let undismiss_buttons = description_edit_buttons[i].parentNode.getElementsByClassName("btn-undismiss");
+    for (let undismiss_button of undismiss_buttons){
 
-            // Change color in the 1st col
-            var rect = document.getElementById("v"+seg_id);
-            rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+        undismiss_button.addEventListener("click", (e)=>{
+            let description_div = e.target.parentNode.parentNode.parentNode;
 
-            // Clear textarea text and disable it
-            let textarea = description_div.getElementsByTagName("textarea")[0];
-            textarea.removeAttribute("disabled");
+            // if already dismissed
+            if (description_div.getAttribute("dismissed") == "true"){
 
-            // Disable Save button
-            let edit_button = description_div.getElementsByClassName("btn-edit")[0];
-            edit_button.removeAttribute("disabled");
+                let seg_id = description_div.getAttribute("seg_id");
 
-            // Change dismiss button to undismiss
-            dismiss_button.innerHTML = "Dismiss";
-        }
+                // Set dismissed attribute to true
+                description_div.setAttribute("dismissed", "false");
+                
+                // Set editing attribute to false
+                description_div.setAttribute("editing", "true");
 
-        update_num_problems();
-    });
+                // Change color of vertical timeline
+                var norm_score = description_div.getAttribute("norm_score");
+                var v_rect = document.getElementById("vseg"+seg_id);
+                v_rect.style.backgroundColor = gradient_color(norm_score, COLOR1, COLOR2);
+
+                // Change color in the 1st col
+                var rect = document.getElementById("v"+seg_id);
+                rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
+
+                // Clear textarea text and disable it
+                let textarea = description_div.getElementsByTagName("textarea")[0];
+                textarea.removeAttribute("disabled");
+
+                // Disable Save button
+                let edit_button = description_div.getElementsByClassName("btn-edit")[0];
+                edit_button.removeAttribute("disabled");
+
+                // Change undismiss button to dismiss
+                for (let dismiss_button_1 of dismiss_buttons){
+                    dismiss_button_1.style.display = "";
+                }
+                undismiss_button.style.display = "none";
+
+            }
+            update_num_problems();
+        });
+    }
 }
 
 
@@ -953,7 +1002,7 @@ slider.oninput = function() {
         var visual_seg_rect = visual_seg_rects[i];
         var norm_score = visual_seg_rect.getAttribute("norm_score");
         // by default show the top % problems with color
-        if (visual_seg_rect.style.fill != "rgb(207, 226, 255)"){
+        if ((visual_seg_rect.style.fill != "rgb(207, 226, 255)") && (visual_seg_rect.style.fill != "rgb(173, 181, 189)")){
             if (norm_score > (this.value * 0.01)){
                 visual_seg_rect.style.fill = gradient_color(1, COLOR1, COLOR2);
             }
@@ -1009,7 +1058,7 @@ update_num_problems();
 
 
 
-// press p to pause/play
+// press alt to pause/play
 window.addEventListener('keydown', function (e) {
     if (e.keyCode == 18) {
         if ((player.getPlayerState() == 2) || (player.getPlayerState() == -1)){
