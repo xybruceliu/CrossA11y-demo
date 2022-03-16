@@ -101,8 +101,15 @@
         <div id="captions-header">
           <h3>Captions</h3>
         </div>
+
+        <!-- custom cc -->
+        <!-- <div class="custom-cc my-4 input-group">
+          <textarea type="text" class="form-control" id="text-custom-cc" placeholder="Add captions to current timestamp"></textarea>
+          <button class="btn btn-primary" type="button" id="btn-custom-cc">Add</button>
+        </div> -->
         
-        <div id="captions-div">
+
+        <div class="row" id="captions-div">
         
         {% for audio_seg in audio_segs %}
           {% if audio_seg.transcript == "NON-SPEECH" %}
@@ -194,7 +201,7 @@
 
           <div class="description-filter">
             <input type="range" min="1" max="100" value="25" class="slider" id="myRange"> 
-            <p id="filter-text">Show top <span id="filter-num">25</span>% visual a11y problems</p>
+            <p id="filter-text">Top <span id="filter-num">25</span>% </p>
           </div>
 
         </div>

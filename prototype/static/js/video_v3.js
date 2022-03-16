@@ -1018,22 +1018,24 @@ slider.oninput = function() {
 }
 
 
-// let dropdown_items = document.getElementsByClassName("dropdown-threshold");
-// for (var i = 0; i < dropdown_items.length; i++) {
-//     dropdown_items.item(i).addEventListener("click", (e) => {
-//         let threshold = e.target.getAttribute("threshold");
-//         // reload description list
-//         reloadDescriptionCol(threshold);
+// HELPER: insertAfter
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 
-//         // highlight current threshold
-//         for (var j = 0; j < dropdown_items.length; j++) {
-//             dropdown_items.item(j).classList.remove("active");
-//         }
-//         e.target.classList.add("active");
 
-//         update_num_problems();
-//     });
-// }
+// HELPER: find which aseg is currently highlighted
+function find_highlight_aseg(){
+    // find which aseg to add below
+    var aseg_v_rects = document.getElementsByClassName("aseg-v-rect");
+    for (var j = 0; j < aseg_v_rects.length; j++) {
+        var aseg_v_rect = aseg_v_rects[j];
+        if (aseg_v_rect.style.borderLeft == "5px solid rgb(255, 218, 106)"){
+            return aseg_v_rect.parentNode;
+        }
+    }
+    return null
+}
 
 
 

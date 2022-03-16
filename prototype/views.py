@@ -16,7 +16,24 @@ def index(request):
 
 # level 1
 def v1(request, video_id):
-    return HttpResponse("v1")
+    visual_segs = VisualSeg.objects.all().filter(video_id=video_id)
+    audio_segs = AudioSeg.objects.all().filter(video_id=video_id)
+    words = Word.objects.all().filter(video_id=video_id)
+    problems = Problem.objects.all().filter(video_id=video_id)
+
+    transcript_list = [audio_seg.transcript for audio_seg in audio_segs]
+    transcript = ". ".join(transcript_list)
+
+    context = {
+        'video_id': video_id,
+        'visual_segs': visual_segs,
+        'audio_segs': audio_segs, 
+        'words': words,
+        'problems': problems,
+        'transcript': transcript
+    }
+
+    return render(request, 'prototype/video_v1.html', context)
 
 # level 2
 def v2(request, video_id):
