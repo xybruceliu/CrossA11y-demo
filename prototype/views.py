@@ -10,6 +10,10 @@ from .models import VisualSeg, AudioSeg, Word, Problem, DescriptionVisual, Descr
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 
+PRESENTER_THRESHOLD = 60000
+SILENCE_THREHOLD = 0.001
+
+
 def index(request):
     return HttpResponse("Hello, world.")
 
@@ -97,8 +101,14 @@ def add(request, video_id):
 
 
     # add all visual segs
-    vt_all_scores = np.sum(arr_vt_matches, axis=1)
+    vt_all_scores = np.mean(arr_vt_matches, axis=1)
+    # remove presenter
+    for i in range(len(vt_all_scores)):
+            if df_visual_seg["presenter_detection"][i] > PRESENTER_THRESHOLD:
+                vt_all_scores[i] = np.max(vt_all_scores)
+
     vt_norm_socres = normalize(vt_all_scores)
+    # print(vt_norm_socres)
     for i, row in df_visual_seg.iterrows():
         VisualSeg.objects.create(video_id=video_id,
                                  seg_id=row["visual_seg_id"],
@@ -110,14 +120,21 @@ def add(request, video_id):
                                  match_scores = json.dumps(list(arr_vt_matches[i,:])),
                                  score = vt_all_scores[i],
                                  norm_score = vt_norm_socres[i],
-                                 detected_visuals = row["visual_feedback"],
-                                 detected_texts = row["text_detection"],
+                                #  detected_visuals = row["visual_feedback"],
+                                #  detected_texts = row["text_detection"],
                                  presenter_detection = row["presenter_detection"],
                                  )
 
     # add all audio segs
-    va_all_scores = np.sum(arr_va_matches, axis=0)
+    va_all_scores = np.mean(arr_va_matches, axis=0)
+    
+    # remove non-speech and silence
+    for j in range(len(va_all_scores)):
+            if (df_audio_seg["raw_subject"][j] != "NON-SPEECH") or (df_audio_seg["silence_detection"][j] < SILENCE_THREHOLD):
+                va_all_scores[j] = np.max(va_all_scores)
+
     va_norm_socres = normalize(va_all_scores)
+    # print(va_norm_socres)
     for i, row in df_audio_seg.iterrows():
 
         # if it's non-speech, use va score to see how much does the sound makes sense
@@ -132,7 +149,8 @@ def add(request, video_id):
                                     match_scores = json.dumps(list(arr_vt_matches[:,i])),
                                     score = va_all_scores[i],
                                     norm_score = va_norm_socres[i],
-                                    transcript = row["raw_subject"]
+                                    transcript = row["raw_subject"],
+                                    silence_detection = row["silence_detection"],
                                     )
                 
         # if has speech, give weight 1
@@ -147,7 +165,8 @@ def add(request, video_id):
                                     match_scores = json.dumps(list(arr_vt_matches[:,i])),
                                     score = va_all_scores[i],
                                     norm_score = 1,
-                                    transcript = row["raw_subject"]
+                                    transcript = row["raw_subject"],
+                                    silence_detection = row["silence_detection"],
                                     )
             
     return HttpResponse(video_id + " successfully added!")

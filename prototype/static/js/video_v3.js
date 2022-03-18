@@ -756,58 +756,58 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
             }
 
 
-            // Feedback
-            var alertPlaceholder = document.getElementById('vseg-feedback'+seg_id)
+            // // Feedback
+            // var alertPlaceholder = document.getElementById('vseg-feedback'+seg_id)
 
-            var wrapper = document.createElement('div');
-            wrapper.classList.add("alert");
-            wrapper.classList.add("alert-success");
-            wrapper.classList.add("alert-warning");
-            wrapper.setAttribute("role", "alert");
-            wrapper.innerHTML='<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+            // var wrapper = document.createElement('div');
+            // wrapper.classList.add("alert");
+            // wrapper.classList.add("alert-success");
+            // wrapper.classList.add("alert-warning");
+            // wrapper.setAttribute("role", "alert");
+            // wrapper.innerHTML='<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
 
-            var detected_visuals = v_rect.getAttribute("detected_visuals").split("),");
+            // var detected_visuals = v_rect.getAttribute("detected_visuals").split("),");
 
            
 
-            for (detected_visual of detected_visuals){
-                detected_visual = detected_visual.substring(1, detected_visual.length-1)
-                let entity = detected_visual.split(",")[0];
-                entity = entity.substring(1, entity.length)
-                let score = detected_visual.split(",")[1];
-                // let timestamp = detected_visual.split(",")[1];
+            // for (detected_visual of detected_visuals){
+            //     detected_visual = detected_visual.substring(1, detected_visual.length-1)
+            //     let entity = detected_visual.split(",")[0];
+            //     entity = entity.substring(1, entity.length)
+            //     let score = detected_visual.split(",")[1];
+            //     // let timestamp = detected_visual.split(",")[1];
 
-                if (entity == ""){
-                    continue;
-                }
+            //     if (entity == ""){
+            //         continue;
+            //     }
 
-                // if not already mentioned/covered
-                if (!is_entity_mentioned(entity, description)){
-                    var detected_visual_span = document.createElement('span')
-                    detected_visual_span.classList.add("detected-visual-entity")
-                    detected_visual_span.setAttribute("score", score);
-                    detected_visual_span.innerText = entity + ", ";
+            //     // if not already mentioned/covered
+            //     if (!is_entity_mentioned(entity, description)){
+            //         var detected_visual_span = document.createElement('span')
+            //         detected_visual_span.classList.add("detected-visual-entity")
+            //         detected_visual_span.setAttribute("score", score);
+            //         detected_visual_span.innerText = entity + ", ";
                     
-                    // add to feedback
-                    wrapper.appendChild(detected_visual_span);
+            //         // add to feedback
+            //         wrapper.appendChild(detected_visual_span);
                     
-                    // detected_visual_span.addEventListener("click", (e) => {
-                    //     var start_time = e.target.getAttribute("timestamp");
-                    //     player.seekTo(Math.max(start_time, 0));
-                    // });
-                }
-            }
+            //         // detected_visual_span.addEventListener("click", (e) => {
+            //         //     var start_time = e.target.getAttribute("timestamp");
+            //         //     player.seekTo(Math.max(start_time, 0));
+            //         // });
+            //     }
+            // }
 
-            // if there's a previous alert, delete and update
-            var prev_wrapper = alertPlaceholder.getElementsByClassName("alert")[0];
-            if (prev_wrapper !== undefined){
-                prev_wrapper.remove();
-            }
+            // // if there's a previous alert, delete and update
+            // var prev_wrapper = alertPlaceholder.getElementsByClassName("alert")[0];
+            // if (prev_wrapper !== undefined){
+            //     prev_wrapper.remove();
+            // }
 
-            // if at least 1 entity detected, append
-            if (wrapper.childElementCount > 1){
-                alertPlaceholder.append(wrapper);
-            }
+            // // if at least 1 entity detected, append
+            // if (wrapper.childElementCount > 1){
+            //     alertPlaceholder.append(wrapper);
+            // }
         }
    
         // else if not editing

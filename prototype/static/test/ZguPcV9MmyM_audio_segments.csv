@@ -1,39 +1,39 @@
-audio_seg_id,subject,start,end,raw_subject
-0,NON-SPEECH,0.0,18.85,NON-SPEECH
-1,yes,18.85,19.72,yes
-2,right pelham pizza uh pelham new york right another place list another 're like go westchester area,19.72,29.32,all right pelham pizza uh in pelham new york right so another place on the list another so we're in the like you can go by in the westchester area
-3,westchester pies 've done today super,29.32,33.82,and in the westchester pies that we've done today have all been super
-4,footbally looking way forgot mount vernon got give shout johnny 's got give shout 911 eight,33.82,41.3,footbally looking and by the way i forgot mount vernon got to give a shout out to johnny's got to give a shout out 911 eight
-5,nine,41.3,41.589999999999996,nine
-6,NON-SPEECH,41.589999999999996,44.63,NON-SPEECH
-7,nine 'm going 9 best pizza places 've ever think actually would nine places n't sleep westchester lot great places high hopes yesterday 's review talked know tell someone great pizza old like uh godfather italian soccer posters wall got like oh 's italian soccer team every news rules think 've around think said 40 years something like,44.63,73.33,nine one i'm going 9 one of the best pizza places i've ever had i think that actually would have been nine but all these places don't sleep on westchester a lot of great places also i have high hopes here why because in yesterday's review i talked about you know how you can tell if someone has great pizza they have the old like uh godfather era italian soccer posters on their wall they got them both i was like oh there's the italian soccer team um one by every news rules i think they've been around i think he said 40 years something like that
-8,super hot,73.33,75.46,super hot
-9,kind got like weird grip 's got 's got uh,75.46,79.14,kind of got like a weird grip it's got a it's got a uh
-10,ski jump 'm gon 'm gon shuffle slices got able adapt game,79.14,84.05,ski jump on that one so i'm gonna i'm gonna shuffle slices gotta be able to adapt in this game
-11,throw pitch every time 're going lose,84.05,87.65,you throw the same pitch every time you're going to lose
-12,got little burn already,87.65,90.25,i have got a little burn already
-13,'m getting little full,90.25,92.55,i'm getting a little full
-14,going miami 're going shirt thinking fat 13 peach reviews got plane,92.55,98.98,going to miami you're going to take my shirt off thinking why you fat because i did 13 peach reviews before i got on the plane what about you
-15,'re know blow 'm eating pizza,98.98,101.05,you're doing you know blow i'm eating pizza
-16,NON-SPEECH,101.05,105.809999,NON-SPEECH
-17,good,105.809999,108.26,very good
-18,places good,108.26,111.62,all these places are very good
-19,super football,111.62,113.56,super football
-20,football possibly get,113.56,115.39,as football as you can possibly get
-21,NON-SPEECH,115.39,118.98,NON-SPEECH
-22,little thicker two great undercarriage good crisp,118.98,122.249999,a little thicker than the other two but great undercarriage good crisp
-23,NON-SPEECH,122.249999,126.359999,NON-SPEECH
-24,busy,126.359999,127.369999,very busy in there too
-25,NON-SPEECH,127.369999,132.84,NON-SPEECH
-26,seven eight,132.84,135.05,seven eight
-27,three,135.05,136.59,three
-28,really good pizza reviews today traditional football style pelham pizza pelham westchester lot good pizza,136.59,145.119999,really good pizza reviews today all traditional all football style pelham pizza pelham westchester a lot of good pizza
-29,yeah 're awesome 's,145.119999,148.52999999999997,yeah you're awesome he's
-30,'s,148.52999999999997,149.84,he's the
-31,worst got shot boy course,149.84,153.33,worst they got a shot for my boy of course
-32,yeah 's brock brock,153.33,155.59,yeah that's brock brock
-33,,155.59,157.7,you
-34,see brock,157.7,159.56999899999997,do you see this brock
-35,look brock brock brock like camera 're cute brock,159.56999899999997,163.89,look at that brock brock the brock like on camera you're so cute brock
-36,'s perfect thanks brother,163.89,165.94,that's perfect name for him so thanks brother you
-37,NON-SPEECH,165.94,172.0,NON-SPEECH
+audio_seg_id,subject,start,end,raw_subject,silence_detection,problem
+0,NON-SPEECH,0,18.85,NON-SPEECH,0.03664745,1
+1,yes,18.85,19.72,yes,0.038290873,0
+2,right pelham pizza uh pelham new york right another place list another 're like go westchester area,19.72,29.32,all right pelham pizza uh in pelham new york right so another place on the list another so we're in the like you can go by in the westchester area,0.065868385,0
+3,westchester pies 've done today super,29.32,33.82,and in the westchester pies that we've done today have all been super,0.06413979,0
+4,footbally looking way forgot mount vernon got give shout johnny 's got give shout 911 eight,33.82,41.3,footbally looking and by the way i forgot mount vernon got to give a shout out to johnny's got to give a shout out 911 eight,0.05541819,0
+5,nine,41.3,41.59,nine,0.101128034,0
+6,NON-SPEECH,41.59,44.63,NON-SPEECH,0.046925806,1
+7,nine 'm going 9 best pizza places 've ever think actually would nine places n't sleep westchester lot great places high hopes yesterday 's review talked know tell someone great pizza old like uh godfather italian soccer posters wall got like oh 's italian soccer team every news rules think 've around think said 40 years something like,44.63,73.33,nine one i'm going 9 one of the best pizza places i've ever had i think that actually would have been nine but all these places don't sleep on westchester a lot of great places also i have high hopes here why because in yesterday's review i talked about you know how you can tell if someone has great pizza they have the old like uh godfather era italian soccer posters on their wall they got them both i was like oh there's the italian soccer team um one by every news rules i think they've been around i think he said 40 years something like that,0.056941118,0
+8,super hot,73.33,75.46,super hot,0.04638921,0
+9,kind got like weird grip 's got 's got uh,75.46,79.14,kind of got like a weird grip it's got a it's got a uh,0.06317072,0
+10,ski jump 'm gon 'm gon shuffle slices got able adapt game,79.14,84.05,ski jump on that one so i'm gonna i'm gonna shuffle slices gotta be able to adapt in this game,0.051774718,0
+11,throw pitch every time 're going lose,84.05,87.65,you throw the same pitch every time you're going to lose,0.047000863,0
+12,got little burn already,87.65,90.25,i have got a little burn already,0.05805708,0
+13,'m getting little full,90.25,92.55,i'm getting a little full,0.046762217,0
+14,going miami 're going shirt thinking fat 13 peach reviews got plane,92.55,98.98,going to miami you're going to take my shirt off thinking why you fat because i did 13 peach reviews before i got on the plane what about you,0.059203304,0
+15,'re know blow 'm eating pizza,98.98,101.05,you're doing you know blow i'm eating pizza,0.0463088,0
+16,NON-SPEECH,101.05,105.809999,NON-SPEECH,0.01669946,0
+17,good,105.809999,108.26,very good,0.027196415,0
+18,places good,108.26,111.62,all these places are very good,0.033865746,0
+19,super football,111.62,113.56,super football,0.043178257,0
+20,football possibly get,113.56,115.39,as football as you can possibly get,0.0688556,0
+21,NON-SPEECH,115.39,118.98,NON-SPEECH,0.019296147,0
+22,little thicker two great undercarriage good crisp,118.98,122.249999,a little thicker than the other two but great undercarriage good crisp,0.07448477,0
+23,NON-SPEECH,122.249999,126.359999,NON-SPEECH,0.015741598,0
+24,busy,126.359999,127.369999,very busy in there too,0.038302276,0
+25,NON-SPEECH,127.369999,132.84,NON-SPEECH,0.018857708,0
+26,seven eight,132.84,135.05,seven eight,0.094533406,0
+27,three,135.05,136.59,three,0.042224072,0
+28,really good pizza reviews today traditional football style pelham pizza pelham westchester lot good pizza,136.59,145.119999,really good pizza reviews today all traditional all football style pelham pizza pelham westchester a lot of good pizza,0.051599536,0
+29,yeah 're awesome 's,145.119999,148.53,yeah you're awesome he's,0.058553725,0
+30,'s,148.53,149.84,he's the,0.046892613,0
+31,worst got shot boy course,149.84,153.33,worst they got a shot for my boy of course,0.056827903,0
+32,yeah 's brock brock,153.33,155.59,yeah that's brock brock,0.043173026,0
+33,,155.59,157.7,you,0.03245864,0
+34,see brock,157.7,159.569999,do you see this brock,0.07429629,0
+35,look brock brock brock like camera 're cute brock,159.569999,163.89,look at that brock brock the brock like on camera you're so cute brock,0.04896767,0
+36,'s perfect thanks brother,163.89,165.94,that's perfect name for him so thanks brother you,0.043242786,0
+37,NON-SPEECH,165.94,172,NON-SPEECH,0.015764818,1

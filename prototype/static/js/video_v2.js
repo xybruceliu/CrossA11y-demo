@@ -321,10 +321,12 @@ function main(){
             if ((start_time >= parseFloat(v_timestamp.getAttribute("start_time"))) && (start_time <= parseFloat(v_timestamp.getAttribute("start_time"))+5)){
                 let v_timestamp_top = v_timestamp.getBoundingClientRect().top;
                 let v_timestamp_bottom = v_timestamp.getBoundingClientRect().bottom;
+
+                console.log(v_timestamp_top)
                 
                 let cur_top = v_timestamp_top + (v_timestamp_bottom - v_timestamp_top) * ((start_time - parseFloat(v_timestamp.getAttribute("start_time"))) / 5);
                 caption.style.position = 'absolute';
-                caption.style.top = cur_top+"px";
+                caption.style.top = window.scrollY + cur_top+"px";
             }
         }
 
@@ -393,7 +395,7 @@ function main(){
                 
                 let cur_top = v_timestamp_top + (v_timestamp_bottom - v_timestamp_top) * ((start_time - parseFloat(v_timestamp.getAttribute("start_time"))) / 5);
                 description.style.position = 'absolute';
-                description.style.top = cur_top+"px";
+                description.style.top = window.scrollY + cur_top+"px";
             }
         }
         

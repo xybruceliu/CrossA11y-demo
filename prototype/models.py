@@ -44,6 +44,7 @@ class AudioSeg(models.Model):
     match_scores = models.CharField(max_length=1000) # list of visual-text matching 0-3 scores for all visual segments w.r.t. to this audio segment
     score = models.FloatField()
     norm_score = models.FloatField() # normalized score 0-1 within the video
+    silence_detection = models.FloatField()
     
     def is_grounded(self):
         return self.score > 0
