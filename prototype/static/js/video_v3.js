@@ -401,7 +401,7 @@ for (var i = 0; i < aseg_v_rects.length; i++) {
     v_timestamp.setAttribute("start_time", start_time);
     v_timestamp.innerHTML = sec2Time(aseg_v_rect.getAttribute("start_time"));
     v_timestamp.style.position = 'absolute';
-    v_timestamp.style.top = top+"px";
+    v_timestamp.style.top = window.scrollY + top + "px";
 
     v_timestamp.addEventListener("click", (e) => {
         player.seekTo(Math.max(start_time, 0));

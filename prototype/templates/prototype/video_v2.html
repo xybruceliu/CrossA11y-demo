@@ -92,6 +92,35 @@
         <div id="v-timestamps-col"></div>
       </div>
 
+      <!-- col 1.7 vertical transcripts... -->
+      <div class="col my-4 mx-4">
+        <div id="transcripts-div">
+          {% for audio_seg in audio_segs %}
+            {% if audio_seg.transcript == "NON-SPEECH" %}
+              <div class="transcript card my-4" 
+                   id="aseg{{audio_seg.seg_id}}"
+                   seg_id="{{audio_seg.seg_id}}"
+                   start_time="{{audio_seg.start_time}}"
+                   end_time="{{audio_seg.end_time}}"
+                   style="width: 18rem; height: {{audio_seg.length}}rem;">
+                <div class="card-body">
+                  NON-SPEECH
+                </div>
+              </div>
+
+            {% else %}
+              <div class="transcript my-4"
+                   id="aseg{{audio_seg.seg_id}}"
+                   seg_id="{{audio_seg.seg_id}}"
+                   start_time="{{audio_seg.start_time}}"
+                   end_time="{{audio_seg.end_time}}">
+                {{audio_seg.transcript}}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
       <!-- col 2: Captions, audio accessibility -->
       <div class="col my-4 mx-2">
         

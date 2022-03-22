@@ -43,7 +43,7 @@ function timeRender(time){
     let v_timestamps = document.getElementsByClassName("v-timestamp");
     for (let v_timestamp of v_timestamps){
         var start_time = parseFloat(v_timestamp.getAttribute("start_time"));
-        var end_time = start_time + 5;
+        var end_time = parseFloat(v_timestamp.getAttribute("end_time"));
         if ((time >= start_time) && (time <= end_time)){
             v_timestamp.style.backgroundColor = "#FFDA6A";
         }
@@ -106,18 +106,25 @@ function main(){
     }
 
     let v_timestamps_col = document.getElementById("v-timestamps-col");
-    for (let i=0; i < player.getDuration(); i+=5){
+    let transcripts = document.getElementsByClassName("transcript");
+    for (let transcript of transcripts){
         let v_timestamp = document.createElement('div');
+        let start_time = transcript.getAttribute("start_time");
+        let end_time = transcript.getAttribute("end_time");
         v_timestamp.classList.add("v-timestamp");
         v_timestamp.classList.add("mb-5");
-        v_timestamp.setAttribute("start_time", i);
-        v_timestamp.innerHTML = sec2Time(i);
-
+        v_timestamp.setAttribute("start_time", start_time);
+        v_timestamp.setAttribute("end_time", end_time);
+        v_timestamp.innerHTML = sec2Time(start_time);
         v_timestamp.addEventListener("click", (e) => {
-            player.seekTo(Math.max(i, 0));
+            player.seekTo(Math.max(start_time, 0));
         });
-
         v_timestamps_col.appendChild(v_timestamp);
+
+        // adjust position
+        let top = transcript.getBoundingClientRect().top;
+        v_timestamp.style.position = 'absolute';
+        v_timestamp.style.top = window.scrollY + top + "px";
     }
 
 
@@ -125,14 +132,16 @@ function main(){
     let btn_add_cc = document.getElementById("btn-add-cc");
     btn_add_cc.addEventListener("click", (e)=>{
         let text_custom_cc = document.getElementById("text-add-cc").value;
+        document.getElementById("text-add-cc").value = "";
         let start_time = player.getCurrentTime();
 
         let captions_div = document.getElementById("captions-div");
         let caption = document.createElement("div");
+        
         caption.classList.add("card")
         caption.classList.add("mx-2")
         caption.classList.add("caption");
-        caption.style.width = "27rem";
+        caption.style.width = "25rem";
         caption.setAttribute("start_time", start_time);
         
         let caption_body = document.createElement("div");
@@ -172,11 +181,11 @@ function main(){
         // adjust position
         let v_timestamps = document.getElementsByClassName("v-timestamp");
         for (let v_timestamp of v_timestamps){
-            if ((start_time >= parseFloat(v_timestamp.getAttribute("start_time"))) && (start_time <= parseFloat(v_timestamp.getAttribute("start_time"))+5)){
+            if ((start_time >= parseFloat(v_timestamp.getAttribute("start_time"))) && (start_time <= parseFloat(v_timestamp.getAttribute("end_time")))){
                 let v_timestamp_top = v_timestamp.getBoundingClientRect().top;
                 let v_timestamp_bottom = v_timestamp.getBoundingClientRect().bottom;
                 
-                let cur_top = v_timestamp_top + (v_timestamp_bottom - v_timestamp_top) * ((start_time - parseFloat(v_timestamp.getAttribute("start_time"))) / 5);
+                let cur_top = v_timestamp_top + (v_timestamp_bottom - v_timestamp_top) * ((start_time - parseFloat(v_timestamp.getAttribute("start_time"))) / (parseFloat(v_timestamp.getAttribute("end_time")) - parseFloat(v_timestamp.getAttribute("start_time"))));
                 caption.style.position = 'absolute';
                 caption.style.top = window.scrollY + cur_top+"px";
             }
@@ -185,6 +194,8 @@ function main(){
         // click to delete
         btn_delete_caption.addEventListener("click", (e)=>{
             caption.remove();
+            let preview_captions = document.getElementById("preview-captions");
+            preview_captions.innerText = "";
         })
     });
 
@@ -193,7 +204,9 @@ function main(){
     // Add descriptions
     let btn_add_ad = document.getElementById("btn-add-ad");
     btn_add_ad.addEventListener("click", (e)=>{
+
         let text_custom_ad = document.getElementById("text-add-ad").value;
+        document.getElementById("text-add-ad").value = "";
         let start_time = player.getCurrentTime();
 
         let descriptions_div = document.getElementById("descriptions-div");
@@ -201,7 +214,7 @@ function main(){
         description.classList.add("card")
         description.classList.add("mx-2")
         description.classList.add("description");
-        description.style.width = "27rem";
+        description.style.width = "25rem";
         description.setAttribute("start_time", start_time);
         
         let description_body = document.createElement("div");
@@ -241,11 +254,11 @@ function main(){
         // adjust position
         let v_timestamps = document.getElementsByClassName("v-timestamp");
         for (let v_timestamp of v_timestamps){
-            if ((start_time >= parseFloat(v_timestamp.getAttribute("start_time"))) && (start_time <= parseFloat(v_timestamp.getAttribute("start_time"))+5)){
+            if ((start_time >= parseFloat(v_timestamp.getAttribute("start_time"))) && (start_time <= parseFloat(v_timestamp.getAttribute("end_time")))){
                 let v_timestamp_top = v_timestamp.getBoundingClientRect().top;
                 let v_timestamp_bottom = v_timestamp.getBoundingClientRect().bottom;
                 
-                let cur_top = v_timestamp_top + (v_timestamp_bottom - v_timestamp_top) * ((start_time - parseFloat(v_timestamp.getAttribute("start_time"))) / 5);
+                let cur_top = v_timestamp_top + (v_timestamp_bottom - v_timestamp_top) * ((start_time - parseFloat(v_timestamp.getAttribute("start_time"))) / (parseFloat(v_timestamp.getAttribute("end_time")) - parseFloat(v_timestamp.getAttribute("start_time"))));
                 description.style.position = 'absolute';
                 description.style.top = window.scrollY + cur_top+"px";
             }

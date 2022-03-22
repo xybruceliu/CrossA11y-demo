@@ -5,7 +5,7 @@ green #4cd964 rgb(76, 217, 100)
 blue #007aff 	rgb(0, 122, 255)
 */
 #youtube-video {
-    margin-top: 50px;
+    margin-top: 120px;
   }
   
   
@@ -140,5 +140,10 @@ text-decoration: underline;
 } */
 
 #v-timestamps-col{
+  margin-top: 170px;
+}
+
+
+#transcripts-div{
   margin-top: 170px;
 }
