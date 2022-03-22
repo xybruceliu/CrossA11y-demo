@@ -214,8 +214,8 @@ for (var i = 0; i < visual_seg_rects.length; i++) {
     var visual_seg_rect = visual_seg_rects[i];
     var norm_score = visual_seg_rect.getAttribute("norm_score");
 
-    // by default show the top 25% problems with color
-    if (norm_score > 0.25){
+    // by default show the top 35% problems with color
+    if (norm_score > 0.35){
         visual_seg_rect.style.fill = gradient_color(1, COLOR1, COLOR2);
     }
     else{
@@ -430,9 +430,9 @@ for (var i = 0; i < descriptions.length; i++) {
     let n = Math.max(1, Math.round(length/4));
     textarea.setAttribute("rows", n);
 
-    // by default show the top 25% problems
+    // by default show the top 35% problems
     let norm_score = description.getAttribute("norm_score");
-    if (norm_score > 0.25){
+    if (norm_score > 0.35){
         description.parentNode.style.display = "none";
     }
     else{
@@ -481,8 +481,8 @@ for (var i = 0; i < vseg_v_rects.length; i++) {
     });
 }
 
-// default 25%
-reloadDescriptionCol(0.25)
+// default 35%
+reloadDescriptionCol(0.35)
 
 
 

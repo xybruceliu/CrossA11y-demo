@@ -51,7 +51,7 @@
 
         <!-- audio timeline -->
         <div class="timeline" id="a-timeline">
-          <h4>Audio Accessibility</h4>
+          <h4>Audio Track</h4>
           {% for audio_seg in audio_segs %}<svg class="a-timeline-svg" width="{{ audio_seg.norm_length }}%" height="20"><rect
             class="a-timeline-rect" 
             id="a{{audio_seg.seg_id}}"
@@ -67,7 +67,7 @@
 
         <!-- visual timeline -->
         <div class="timeline" id="v-timeline">
-          <h4>Visual Accessibility</h4>
+          <h4>Visual Track</h4>
           {% for visual_seg in visual_segs %}<svg class="v-timeline-svg" width="{{ visual_seg.norm_length }}%" height="20"><rect
               class="v-timeline-rect" 
               id="v{{visual_seg.seg_id}}"
@@ -187,21 +187,10 @@
           <div id="description-heading">
             <h3>Video Description</h3>
           </div>
-<!--           
-          <div id="description-filter" class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              Filter
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item dropdown-threshold" id="dropdown-item-10" threshold=0.1>Top 10%</a></li>
-              <li><a class="dropdown-item dropdown-threshold active" id="dropdown-item-25" threshold=0.25>Top 25%</a></li>
-              <li><a class="dropdown-item dropdown-threshold" id="dropdown-item-50" threshold=0.5>Top 50%</a></li>
-            </ul>
-          </div> -->
 
           <div class="description-filter">
-            <input type="range" min="1" max="100" value="25" class="slider" id="myRange"> 
-            <p id="filter-text">Top <span id="filter-num">25</span>% </p>
+            <input type="range" min="1" max="100" value="35" class="slider" id="myRange"> 
+            <p id="filter-text">Top <span id="filter-num">35</span>% </p>
           </div>
 
         </div>

@@ -95,14 +95,16 @@
       <!-- col 2: Captions, audio accessibility -->
       <div class="col my-4 mx-2">
         
-        <div id="captions-header">
-          <h3>Captions</h3>
-        </div>
+        <div class="sticky-top">
+          <div id="captions-header">
+            <h3>Captions</h3>
+          </div>
 
-        <!-- add cc -->
-        <div class="add-cc my-4 input-group">
-          <textarea type="text" class="form-control" id="text-add-cc" placeholder="Add captions to current timestamp"></textarea>
-          <button class="btn btn-primary" type="button" id="btn-add-cc">Add</button>
+          <!-- add cc -->
+          <div class="add-cc my-4 input-group">
+            <textarea type="text" class="form-control" id="text-add-cc" placeholder="Add captions to current timestamp"></textarea>
+            <button class="btn btn-primary" type="button" id="btn-add-cc">Add</button>
+          </div>
         </div>
 
         <div class="row" id="captions-div">
@@ -115,18 +117,20 @@
 
       <!-- col 3: Video Descripiton, visual accessibility -->
       <div class="col my-4 mx-2">
-
-        <div id="description-header">
-          <div id="description-heading">
-            <h3>Video Description</h3>
+        
+        <div class="sticky-top">
+          <div id="description-header">
+            <div id="description-heading">
+              <h3>Video Description</h3>
+            </div>
           </div>
-        </div>
 
-        <!-- add ad -->
-        <div class="add-ad my-4 input-group">
+          <!-- add ad -->
+          <div class="add-ad my-4 input-group">
             <textarea type="text" class="form-control" id="text-add-ad" placeholder="Add description to current timestamp"></textarea>
             <button class="btn btn-primary" type="button" id="btn-add-ad">Add</button>
           </div>
+        </div>
 
         <div id="descriptions-div">
          
