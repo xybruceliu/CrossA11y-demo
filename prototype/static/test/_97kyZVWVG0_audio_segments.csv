@@ -15,9 +15,9 @@ audio_seg_id,subject,start,end,raw_subject,silence_detection,problem
 13,around outside,109.88,114.45,around the outside,0.025068471,0
 14,cup without hole,114.45,116.72,of your cup the one that without the hole,0.032327283,0
 15,ribbon press,116.72,118.1,your ribbon and just press it,0.03566064,0
-16,NON-SPEECH,118.1,121.17,NON-SPEECH,0.01443441,0
+16,NON-SPEECH,118.1,121.17,NON-SPEECH,0.01443441,1
 17,right top,121.17,122.12,right down on top,0.02792819,0
-18,NON-SPEECH,122.12,130.06,NON-SPEECH,0.016162619,0
+18,NON-SPEECH,122.12,130.06,NON-SPEECH,0.016162619,1
 19,'ve,130.06,131.15,so once you've,0.040174685,0
 20,got two cups together 're going flip upside,131.15,136.46,got your two cups together we're going to again flip it upside down,0.026562268,0
 21,,136.46,138.57,so that your,0.023854278,0
@@ -31,9 +31,9 @@ audio_seg_id,subject,start,end,raw_subject,silence_detection,problem
 29,dime sized,170.2,171.61,dime sized,0.027528534,0
 30,go blue,171.61,172.9,go to blue,0.02405494,0
 31,hold peace,172.9,174.589999,and hold your peace over,0.030850101,0
-32,NON-SPEECH,174.589999,179.27,NON-SPEECH,0.01773636,0
+32,NON-SPEECH,174.589999,179.27,NON-SPEECH,0.01773636,1
 33,'re gon side,179.27,180.399999,and you're gonna do the same on the other side,0.034644388,0
-34,NON-SPEECH,180.399999,189.26,NON-SPEECH,0.016491733,0
+34,NON-SPEECH,180.399999,189.26,NON-SPEECH,0.016491733,1
 35,see right tails uneven I 'm going even,189.26,195.13,and you can see right now my tails are uneven so I'm just going to even those up,0.031067213,0
 36,like,195.13,198,just like that,0.019845707,0
 37,next thing I 'm going I 'm going thin thinner ribbon I I 'm going go along outside,198,206.429999,the next thing I'm going to do is I'm going to take that other thin thinner ribbon that I have and I'm going to go along the outside,0.034627512,0
@@ -42,11 +42,11 @@ audio_seg_id,subject,start,end,raw_subject,silence_detection,problem
 40,cups,215.109999,216.74,cups,0.017788434,0
 41,careful ribbon really lightly,216.74,221.53,and be careful because this ribbon really been and just lightly,0.027665377,0
 42,tack,221.53,222.26,tack it on,0.021372223,0
-43,NON-SPEECH,222.26,226.73,NON-SPEECH,0.015975459,0
+43,NON-SPEECH,222.26,226.73,NON-SPEECH,0.015975459,1
 44,,226.73,228.57,and,0.026673518,0
 45,,228.57,231.38,then,0.015635626,0
 46,,231.38,231.87,when,0.014041825,0
-47,NON-SPEECH,231.87,235.79,NON-SPEECH,0.017172335,0
+47,NON-SPEECH,231.87,235.79,NON-SPEECH,0.017172335,1
 48,get snip,235.79,239.58,you get to the end just snip it off,0.027879054,0
 49,last step perfect little ones get involved grab halloween stickers decorate see fit way around Lantern,239.58,249.44,and then the last step perfect for your little ones to get involved here grab those halloween stickers and just decorate as you see fit all the way around your Lantern,0.03517189,0
 50,I got really cute,249.44,251.51,I got these really cute,0.031883247,0
@@ -55,4 +55,4 @@ audio_seg_id,subject,start,end,raw_subject,silence_detection,problem
 53,fits nicely inside,265.32,268.949999,and it fits nicely inside,0.030301917,0
 54,Lantern,268.949999,270.73,your Lantern,0.026190547,0
 55,super cute super easy great kids rooms get involved decorations holiday season perfect anybody really really fun make I hope enjoyed craft would like halloween videos crafting videos please subscribe youtube channel,270.73,285.58,super cute super easy great for the kids rooms if they want to get involved the decorations during the holiday season perfect for anybody and really really fun to make I hope you enjoyed this craft if you would like some more halloween videos and crafting videos please subscribe to youtube channel,0.03394133,0
-56,NON-SPEECH,285.58,291,NON-SPEECH,0.014596767,0
+56,NON-SPEECH,285.58,291,NON-SPEECH,0.014596767,1

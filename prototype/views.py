@@ -10,8 +10,8 @@ from .models import VisualSeg, AudioSeg, Word, Problem, DescriptionVisual, Descr
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 
-PRESENTER_THRESHOLD = 60000
-SILENCE_THREHOLD = 0.001
+PRESENTER_THRESHOLD = 58000
+SILENCE_THREHOLD = 0.0066
 
 
 def index(request):
