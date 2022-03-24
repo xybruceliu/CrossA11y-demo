@@ -148,3 +148,18 @@ class DescriptionAudio(models.Model):
         return self.video_id + "&" + str(self.seg_id)
 
 
+
+class Log(models.Model):
+    timestamp = models.CharField(max_length=50)
+    event = models.CharField(max_length=50)
+    video_id = models.CharField(max_length=200)
+    audio_visual = models.CharField(max_length=50)
+    seg_id = models.CharField(max_length=50)
+    seg_timestamp = models.CharField(max_length=50)
+    text = models.CharField(max_length=1000)
+    value = models.CharField(max_length=50)
+
+    def toString(self):
+        return self.video_id + "&" + str(self.timestamp)
+    def __str__(self):
+        return self.video_id + "&" + str(self.timestamp)

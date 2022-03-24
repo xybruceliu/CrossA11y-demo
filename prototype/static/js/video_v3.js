@@ -20,9 +20,38 @@ function onPlayerReady() {
     startInterval();
 }
 
-function onPlayerStateChange() {
-    console.log("my state changed");
-} 
+// logging
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "player_play",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "none",
+            seg_id: "none",
+            seg_timestamp: player.getCurrentTime(),
+            text: "none",
+            value: "none",
+        }));
+    }
+
+    else if ((event.data == YT.PlayerState.PAUSED) || (event.data == YT.PlayerState.ENDED)) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "player_stop",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "none",
+            seg_id: "none",
+            seg_timestamp: player.getCurrentTime(),
+            text: "none",
+            value: "none",
+        }));
+    }
+  }
 
 
 
@@ -117,7 +146,9 @@ function timeRender(time){
                 if (description_edits.length > 0){
                     let description_edit = description_edits[0];
                     let description = document.getElementById("describe-visual-form-"+seg_id).value;
-                        if ((description_edit.getAttribute("editing") == "false") && (description.length > 0) && (SPEAKING==false)){
+                    let preview_checked = document.getElementById("description-preview-check").checked;
+                    console.log(preview_checked)
+                        if ((description_edit.getAttribute("editing") == "false") && (description.length > 0) && (SPEAKING==false) && (preview_checked)){
                             SPEAKING = true;
                             player.pauseVideo();
                             var msg = new SpeechSynthesisUtterance();
@@ -227,6 +258,48 @@ for (var i = 0; i < visual_seg_rects.length; i++) {
         var start_time = e.target.getAttribute("start_time");
         var end_time = e.target.getAttribute("end_time");
         player.seekTo(Math.max(start_time, 0));
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "rect",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "visual",
+            seg_id: e.target.getAttribute("id"),
+            seg_timestamp: e.target.getAttribute("start_time"),
+            text: "none",
+            value: e.target.getAttribute("norm_score"),
+        }));
+    });
+
+    // double click to add a segment
+    visual_seg_rects.item(i).addEventListener("dblclick", (e) => {
+        var seg_id = e.target.getAttribute("id");
+        let descriptions = document.getElementById("description-div");
+        let f_seg_id = seg_id.substring(1,seg_id.length);
+        let description = descriptions.querySelectorAll(`div[seg_id="${f_seg_id}"]`)[1];
+        description.setAttribute("added", "true");
+        var slider = document.getElementById("myRange");
+        reloadDescriptionCol(slider.value * 0.01);
+
+        e.target.setAttribute("added", true);
+        e.target.style.fill = gradient_color(e.target.getAttribute("norm_score"), COLOR1, COLOR2);
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "add_visual_seg",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "visual",
+            seg_id: e.target.getAttribute("id"),
+            seg_timestamp: e.target.getAttribute("start_time"),
+            text: "none",
+            value: e.target.getAttribute("norm_score"),
+        }));
     });
 
     // hover to show matched segments
@@ -282,6 +355,20 @@ for (var i = 0; i < audio_seg_rects.length; i++) {
         var start_time = e.target.getAttribute("start_time");
         var end_time = e.target.getAttribute("end_time");
         player.seekTo(Math.max(start_time, 0));
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "rect",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "audio",
+            seg_id: e.target.getAttribute("id"),
+            seg_timestamp: e.target.getAttribute("start_time"),
+            text: "none",
+            value: e.target.getAttribute("norm_score"),
+        }));
     });
 
     // hover to show matched segments
@@ -387,6 +474,20 @@ for (var i = 0; i < aseg_v_rects.length; i++) {
         var start_time = e.target.getAttribute("start_time");
         var end_time = e.target.getAttribute("end_time");
         player.seekTo(Math.max(start_time, 0));
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "v_rect",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "audio",
+            seg_id: e.target.getAttribute("id"),
+            seg_timestamp: e.target.getAttribute("start_time"),
+            text: "none",
+            value: e.target.getAttribute("norm_score"),
+        }));
     });
 
 
@@ -405,6 +506,20 @@ for (var i = 0; i < aseg_v_rects.length; i++) {
 
     v_timestamp.addEventListener("click", (e) => {
         player.seekTo(Math.max(start_time, 0));
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "seek_v_timestamp",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "audio",
+            seg_id: aseg_v_rect.getAttribute("seg_id"),
+            seg_timestamp: start_time,
+            text: "none",
+            value: "none",
+        }));
     });
 
     let v_timestamps_col = document.getElementById("v-timestamps-col");
@@ -478,6 +593,20 @@ for (var i = 0; i < vseg_v_rects.length; i++) {
         var start_time = e.target.getAttribute("start_time");
         var end_time = e.target.getAttribute("end_time");
         player.seekTo(Math.max(start_time, 0));
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "v_rect",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "visual",
+            seg_id: e.target.getAttribute("id"),
+            seg_timestamp: e.target.getAttribute("start_time"),
+            text: "none",
+            value: e.target.getAttribute("norm_score"),
+        }));
     });
 }
 
@@ -538,8 +667,22 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
             rect.style.fill = "#CFE2FF";
 
             // disable dismiss button
-            var dismiss_button = document.getElementById("describe-audio-dismiss-" + seg_id);
+            var dismiss_button = document.getElementsByClassName("btn-dismiss-audio-" + seg_id)[0];
             dismiss_button.classList.add("disabled")
+
+            // logging
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/prototype/log", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                event: "save",
+                video_id: (window.location.href).substring(32,43), 
+                audio_visual: "audio",
+                seg_id: seg_id,
+                seg_timestamp: start_time,
+                text: description,
+                value: norm_score,
+            }));
         }
    
         // else if not editing
@@ -557,8 +700,22 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
             rect.style.fill = gradient_color(norm_score, COLOR1, COLOR2);
 
             // enable dismiss button
-            var dismiss_button = document.getElementById("describe-audio-dismiss-" + seg_id);
+            var dismiss_button = document.getElementsByClassName("btn-dismiss-audio-" + seg_id)[0];
             dismiss_button.classList.remove("disabled")
+
+            // logging
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/prototype/log", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                event: "edit",
+                video_id: (window.location.href).substring(32,43), 
+                audio_visual: "audio",
+                seg_id: seg_id,
+                seg_timestamp: start_time,
+                text: "none",
+                value: norm_score,
+            }));
         }
 
         update_num_problems();
@@ -571,9 +728,29 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
         dismiss_button.addEventListener("click", (e)=>{
             let captions_div = e.target.parentNode.parentNode.parentNode;
 
+            var video_id = captions_div.getAttribute("video_id");
+            var seg_id = captions_div.getAttribute("seg_id");
+            var start_time = captions_div.getAttribute("start_time");
+            var end_time = captions_div.getAttribute("end_time");
+            var length = captions_div.getAttribute("length");
+            var norm_score = captions_div.getAttribute("norm_score");
+
             // if not yet dismissed
             if (captions_div.getAttribute("dismissed") == "false"){
-                let seg_id = captions_div.getAttribute("seg_id");
+
+                // logging
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/prototype/log", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({
+                    event: "dismiss",
+                    video_id: (window.location.href).substring(32,43), 
+                    audio_visual: "audio",
+                    seg_id: seg_id,
+                    seg_timestamp: start_time,
+                    text: "none",
+                    value: norm_score,
+                }));
 
                 // Set dismissed attribute to true
                 captions_div.setAttribute("dismissed", "true");
@@ -618,10 +795,29 @@ for (var i = 0; i < captions_edit_buttons.length; i++) {
         undismiss_button.addEventListener("click", (e)=>{
             let captions_div = e.target.parentNode.parentNode.parentNode;
 
+            var video_id = captions_div.getAttribute("video_id");
+            var seg_id = captions_div.getAttribute("seg_id");
+            var start_time = captions_div.getAttribute("start_time");
+            var end_time = captions_div.getAttribute("end_time");
+            var length = captions_div.getAttribute("length");
+            var norm_score = captions_div.getAttribute("norm_score");
+
             // if already dismissed
             if (captions_div.getAttribute("dismissed") == "true"){
 
-                let seg_id = captions_div.getAttribute("seg_id");
+                // logging
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/prototype/log", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({
+                    event: "undismiss",
+                    video_id: (window.location.href).substring(32,43), 
+                    audio_visual: "audio",
+                    seg_id: seg_id,
+                    seg_timestamp: start_time,
+                    text: "none",
+                    value: norm_score,
+                }));
 
                 // Set dismissed attribute to true
                 captions_div.setAttribute("dismissed", "false");
@@ -755,6 +951,20 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
                 dismiss_button.classList.add("disabled");
             }
 
+            // logging
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/prototype/log", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                event: "save",
+                video_id: (window.location.href).substring(32,43), 
+                audio_visual: "visual",
+                seg_id: seg_id,
+                seg_timestamp: start_time,
+                text: description,
+                value: norm_score,
+            }));
+
 
             // // Feedback
             // var alertPlaceholder = document.getElementById('vseg-feedback'+seg_id)
@@ -830,6 +1040,20 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
                 dismiss_button.classList.remove("disabled")
             }
 
+            // logging
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/prototype/log", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                event: "edit",
+                video_id: (window.location.href).substring(32,43), 
+                audio_visual: "visual",
+                seg_id: seg_id,
+                seg_timestamp: start_time,
+                text: "none",
+                value: norm_score,
+            }));
+
         }
 
         update_num_problems();
@@ -842,9 +1066,29 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
         dismiss_button.addEventListener("click", (e)=>{
             let description_div = e.target.parentNode.parentNode.parentNode;
 
+            var video_id = description_div.getAttribute("video_id");
+            var seg_id = description_div.getAttribute("seg_id");
+            var start_time = description_div.getAttribute("start_time");
+            var end_time = description_div.getAttribute("end_time");
+            var length = description_div.getAttribute("length");
+            var norm_score = description_div.getAttribute("norm_score");
+
             // if not yet dismissed
             if (description_div.getAttribute("dismissed") == "false"){
-                let seg_id = description_div.getAttribute("seg_id");
+
+                // logging
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/prototype/log", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({
+                    event: "dismiss",
+                    video_id: (window.location.href).substring(32,43), 
+                    audio_visual: "visual",
+                    seg_id: seg_id,
+                    seg_timestamp: start_time,
+                    text: "none",
+                    value: norm_score,
+                }));
 
                 // Set dismissed attribute to true
                 description_div.setAttribute("dismissed", "true");
@@ -889,10 +1133,29 @@ for (var i = 0; i < description_edit_buttons.length; i++) {
         undismiss_button.addEventListener("click", (e)=>{
             let description_div = e.target.parentNode.parentNode.parentNode;
 
+            var video_id = description_div.getAttribute("video_id");
+            var seg_id = description_div.getAttribute("seg_id");
+            var start_time = description_div.getAttribute("start_time");
+            var end_time = description_div.getAttribute("end_time");
+            var length = description_div.getAttribute("length");
+            var norm_score = description_div.getAttribute("norm_score");
+
             // if already dismissed
             if (description_div.getAttribute("dismissed") == "true"){
 
-                let seg_id = description_div.getAttribute("seg_id");
+                // logging
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/prototype/log", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({
+                    event: "undismiss",
+                    video_id: (window.location.href).substring(32,43), 
+                    audio_visual: "visual",
+                    seg_id: seg_id,
+                    seg_timestamp: start_time,
+                    text: "none",
+                    value: norm_score,
+                }));
 
                 // Set dismissed attribute to true
                 description_div.setAttribute("dismissed", "false");
@@ -942,8 +1205,15 @@ function reloadDescriptionCol(threshold){
         var description = descriptions[i];
         // Filter
         let norm_score = description.getAttribute("norm_score");
-        if (norm_score > threshold){
-            description.parentNode.style.display = "none";
+
+        if ((norm_score > threshold) && (description.getAttribute("added") == "false")){
+            if ((description.getAttribute("editing") == "false") && (description.getAttribute("dismissed") == "false")){
+                description.parentNode.style.display = "";
+            }
+
+            else{
+                description.parentNode.style.display = "none";
+            }
         }
 
         else{
@@ -1002,7 +1272,7 @@ slider.oninput = function() {
         var visual_seg_rect = visual_seg_rects[i];
         var norm_score = visual_seg_rect.getAttribute("norm_score");
         // by default show the top % problems with color
-        if ((visual_seg_rect.style.fill != "rgb(207, 226, 255)") && (visual_seg_rect.style.fill != "rgb(173, 181, 189)")){
+        if ((visual_seg_rect.style.fill != "rgb(207, 226, 255)") && (visual_seg_rect.style.fill != "rgb(173, 181, 189)") && (visual_seg_rect.getAttribute("added") == "false")){
             if (norm_score > (this.value * 0.01)){
                 visual_seg_rect.style.fill = gradient_color(1, COLOR1, COLOR2);
             }
@@ -1016,6 +1286,24 @@ slider.oninput = function() {
     let filter_num = document.getElementById("filter-num");
     filter_num.innerText = this.value;
 }
+
+
+slider.addEventListener("mouseup", (e)=>{
+    // logging
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/prototype/log", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        event: "filter",
+        video_id: (window.location.href).substring(32,43), 
+        audio_visual: "visual",
+        seg_id: "none",
+        seg_timestamp: "none",
+        text: "none",
+        value: e.target.value,
+    }));
+})
+
 
 
 // HELPER: insertAfter

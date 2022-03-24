@@ -22,9 +22,39 @@ function onPlayerReady() {
     startInterval();
 }
 
-function onPlayerStateChange() {
-    console.log("my state changed");
-} 
+// logging
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "player_play",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "none",
+            seg_id: "none",
+            seg_timestamp: player.getCurrentTime(),
+            text: "none",
+            value: "none",
+        }));
+    }
+
+    else if ((event.data == YT.PlayerState.PAUSED) || (event.data == YT.PlayerState.ENDED)) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "player_stop",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "none",
+            seg_id: "none",
+            seg_timestamp: player.getCurrentTime(),
+            text: "none",
+            value: "none",
+        }));
+    }
+  }
+
 
 // timeline pointer
 function startInterval() {
@@ -71,8 +101,8 @@ function timeRender(time){
     let descriptions = document.getElementsByClassName("description");
     for (let description of descriptions){
         var start_time = parseFloat(description.getAttribute("start_time"));
-
-        if ((time >= start_time) && (time < (parseFloat(start_time) + 0.2)) && (SPEAKING==false)){
+        let preview_checked = document.getElementById("description-preview-check").checked;
+        if ((time >= start_time) && (time < (parseFloat(start_time) + 0.2)) && (SPEAKING==false) && (preview_checked)){
             let text = description.innerText;
             SPEAKING = true;
             player.pauseVideo();
@@ -109,6 +139,7 @@ function main(){
     let transcripts = document.getElementsByClassName("transcript");
     for (let transcript of transcripts){
         let v_timestamp = document.createElement('div');
+        let seg_id = transcript.getAttribute("seg_id");
         let start_time = transcript.getAttribute("start_time");
         let end_time = transcript.getAttribute("end_time");
         v_timestamp.classList.add("v-timestamp");
@@ -118,6 +149,20 @@ function main(){
         v_timestamp.innerHTML = sec2Time(start_time);
         v_timestamp.addEventListener("click", (e) => {
             player.seekTo(Math.max(start_time, 0));
+
+            // logging
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/prototype/log", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                event: "seek_v_timestamp",
+                video_id: (window.location.href).substring(32,43), 
+                audio_visual: "audio",
+                seg_id: seg_id,
+                seg_timestamp: start_time,
+                text: "none",
+                value: "none",
+            }));
         });
         v_timestamps_col.appendChild(v_timestamp);
 
@@ -131,6 +176,21 @@ function main(){
     // Add captions
     let btn_add_cc = document.getElementById("btn-add-cc");
     btn_add_cc.addEventListener("click", (e)=>{
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "add_custom_cc",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "audio",
+            seg_id: "none",
+            seg_timestamp: player.getCurrentTime(),
+            text: document.getElementById("text-add-cc").value,
+            value: "none",
+        }));
+
         let text_custom_cc = document.getElementById("text-add-cc").value;
         document.getElementById("text-add-cc").value = "";
         let start_time = player.getCurrentTime();
@@ -179,7 +239,7 @@ function main(){
         }
 
         // adjust position
-        let v_timestamps = document.getElementsByClassName("v-timestamp");
+        let v_timestamps = document.getElementsByClassName("transcript");
         for (let v_timestamp of v_timestamps){
             if ((start_time >= parseFloat(v_timestamp.getAttribute("start_time"))) && (start_time <= parseFloat(v_timestamp.getAttribute("end_time")))){
                 let v_timestamp_top = v_timestamp.getBoundingClientRect().top;
@@ -204,6 +264,20 @@ function main(){
     // Add descriptions
     let btn_add_ad = document.getElementById("btn-add-ad");
     btn_add_ad.addEventListener("click", (e)=>{
+
+        // logging
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/prototype/log", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+            event: "add_custom_ad",
+            video_id: (window.location.href).substring(32,43), 
+            audio_visual: "visual",
+            seg_id: "none",
+            seg_timestamp: player.getCurrentTime(),
+            text: document.getElementById("text-add-ad").value,
+            value: "none",
+        }));
 
         let text_custom_ad = document.getElementById("text-add-ad").value;
         document.getElementById("text-add-ad").value = "";
@@ -252,7 +326,7 @@ function main(){
         }
 
         // adjust position
-        let v_timestamps = document.getElementsByClassName("v-timestamp");
+        let v_timestamps = document.getElementsByClassName("transcript");
         for (let v_timestamp of v_timestamps){
             if ((start_time >= parseFloat(v_timestamp.getAttribute("start_time"))) && (start_time <= parseFloat(v_timestamp.getAttribute("end_time")))){
                 let v_timestamp_top = v_timestamp.getBoundingClientRect().top;

@@ -78,6 +78,7 @@
               score="{{visual_seg.score}}"
               norm_score="{{visual_seg.norm_score}}"
               match_scores="{{visual_seg.match_scores}}"
+              added = "false"
               /></svg>{% endfor %}
         </div>
         
@@ -142,9 +143,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li><a class="dropdown-item btn-undismiss" style="display:none">Undismiss</a></li>
-                  <li><a class="dropdown-item btn-dismiss btn-dismiss-audio-{{audio_seg.seg_id}}">Dismiss: Silent</a></li>
-                  <li><a class="dropdown-item btn-dismiss btn-dismiss-audio-{{audio_seg.seg_id}}">Dismiss: Not sure why this is inaccessible</a></li>
-                  <li><a class="dropdown-item btn-dismiss btn-dismiss-audio-{{audio_seg.seg_id}}">Dismiss: Other </a></li>
+                  <li><a class="dropdown-item btn-dismiss btn-dismiss-audio-{{audio_seg.seg_id}}">Dismiss</a></li>
                 </ul>
               </div>
             </div>
@@ -193,6 +192,11 @@
             <p id="filter-text">Top <span id="filter-num">35</span>% </p>
           </div>
 
+          <div class="mx-5 form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="description-preview-check">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Preview</label>
+          </div>
+
         </div>
 
         <div id="description-div">
@@ -222,7 +226,9 @@
               length="{{visual_seg.length}}" 
               norm_score="{{visual_seg.norm_score}}" 
               editing="true"
-              dismissed="false">
+              dismissed="false"
+              added = "false"
+              >
                 <textarea type="text" class="form-control" id="describe-visual-form-{{visual_seg.seg_id}}" placeholder="Describe the visual"></textarea>
                 <button type="button" class="btn btn-outline-secondary btn-edit">Save</button>
                 <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
@@ -230,14 +236,11 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li><a class="dropdown-item btn-undismiss" style="display:none">Undismiss</a></li>
-                  <li><a class="dropdown-item btn-dismiss btn-dismiss-visual-{{visual_seg.seg_id}}">Dismiss: Host speaking to camera</a></li>
-                  <li><a class="dropdown-item btn-dismiss btn-dismiss-visual-{{visual_seg.seg_id}}">Dismiss: Already described in speech</a></li>
-                  <li><a class="dropdown-item btn-dismiss btn-dismiss-visual-{{visual_seg.seg_id}}">Dismiss: Not sure why this is inaccessible</a></li>
-                  <li><a class="dropdown-item btn-dismiss btn-dismiss-visual-{{visual_seg.seg_id}}">Dismiss: Other </a></li>
+                  <li><a class="dropdown-item btn-dismiss btn-dismiss-visual-{{visual_seg.seg_id}}">Dismiss</a></li>
                 </ul>
               </div>
             </div>
-            <div id="vseg-feedback{{visual_seg.seg_id}}"></div>
+            <!-- <div id="vseg-feedback{{visual_seg.seg_id}}"></div> -->
               
           {% endfor %}
 

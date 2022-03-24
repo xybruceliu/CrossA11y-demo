@@ -4,8 +4,9 @@ from django.http import HttpResponse
 import numpy as np
 import pandas as pd
 import json
+import datetime;
 
-from .models import VisualSeg, AudioSeg, Word, Problem, DescriptionVisual, DescriptionAudio
+from .models import VisualSeg, AudioSeg, Word, Problem, DescriptionVisual, DescriptionAudio, Log
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
@@ -246,6 +247,33 @@ def describe_visual(request, video_id, seg_id):
 
     else:
         return HttpResponse("describe visual testing")
+
+
+
+# Repair Accessibility Issue Describe Visual
+@csrf_exempt
+def log(request):
+    if request.method == 'POST':
+
+        data=json.loads(request.body)
+
+        Log.objects.create(
+            timestamp = str(datetime.datetime.now()),
+            event = data["event"],
+            video_id = data["video_id"],
+            audio_visual = data["audio_visual"],
+            seg_id = data["seg_id"],
+            seg_timestamp = data["seg_timestamp"],
+            text = data["text"],
+            value = data["value"],
+        )
+
+        return HttpResponse("logged!")
+
+    else:
+        return HttpResponse("failed to log!")
+
+
 
 # Helper: normalizaiton
 def normalize(data):
