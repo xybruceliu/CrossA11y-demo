@@ -3,6 +3,7 @@ const COLOR1 = [255, 0, 0]
 const COLOR2 = [220, 220, 220]
 
 
+
 // 0 VIDEO CONTROL
 var player;
 function onYouTubeIframeAPIReady() {
@@ -147,7 +148,6 @@ function timeRender(time){
                     let description_edit = description_edits[0];
                     let description = document.getElementById("describe-visual-form-"+seg_id).value;
                     let preview_checked = document.getElementById("description-preview-check").checked;
-                    console.log(preview_checked)
                         if ((description_edit.getAttribute("editing") == "false") && (description.length > 0) && (SPEAKING==false) && (preview_checked)){
                             SPEAKING = true;
                             player.pauseVideo();
