@@ -1,0 +1,53 @@
+audio_seg_id,subject,start,end,raw_subject,silence_detection
+0,NON-SPEECH,0.0,3.78,NON-SPEECH,0.047615252
+1,,3.78,11.719999000000001,this is me i'm 18 and i'm about to start college at ucla i'm majoring in computer science and engineering,0.097625285
+2,,11.719999000000001,14.889999,although i'm thinking of transferring to just computer science,0.07359064
+3,,14.889999,17.98,these are the journals that i write in every day,0.071372986
+4,,17.98,20.68,this is the notebook i write all my songs in,0.072837986
+5,,20.68,22.75,this is the guitar i use,0.06619222
+6,,22.75,28.04,this is what my youtube channel looks like i currently have 6 subscribers,0.071227886
+7,,28.04,30.46,this is my boyfriend,0.054408956
+8,,30.46,34.299999,yeah okay fine i don't have one yet,0.09030767
+9,,34.299999,37.23,but here this my celebrity crush,0.08011681
+10,,37.23,38.29,this,0.07518355
+11,,38.29,40.52,is the phone i currently have instagram,0.12860899
+12,,40.52,43.77,is my favorite app this is what my profile looks like,0.066549
+13,,43.77,47.16,these are some of my favorite artists right now,0.06975202
+14,,47.16,52.43,these are what my top tracks on spotify are right now,0.0768489
+15,,52.43,55.32,this is the view from my bedroom window,0.08750975
+16,,55.32,56.02,this is my room,0.12333451
+17,NON-SPEECH,56.02,59.84,NON-SPEECH,0.049720384
+18,,59.84,62.389998999999996,this is my backyard,0.09186056
+19,,62.389998999999996,64.91,although college is online for now,0.10068548
+20,,64.91,67.78999999999999,i'm excited to eventually move to,0.082930386
+21,,67.78999999999999,70.379999,la as much as i love silicon valley and norcal,0.10230374
+22,,70.379999,74.32,it's getting a little boring since i've been here for so long,0.08962715
+23,,74.32,78.58,this is my desk where i'm about to attend virtual college classes from,0.082168415
+24,,78.58,81.16,these are some of my closest friends,0.07044666
+25,,81.16,84.91,i've had a pretty incredible friend group that i've known since middle school,0.097705685
+26,,84.91,90.42,it's a strange feeling to know that each of us is now starting the next chapter in our lives,0.08806532
+27,,90.42,95.5,each at a different school in a different city studying a different major,0.0762422
+28,,95.5,97.49,but i know they're all going to thrive,0.102032915
+29,,97.49,100.24,and i'm eagerly cheering them on,0.049272995
+30,,100.24,106.690001,and then there's my college roommates to be we've bonded so much in just a few months and i love talking to them,0.07694791
+31,,106.690001,112.47,we vibe together so well and i can't wait to get to campus and be able to dorm with them,0.08062936
+32,,112.47,115.82,this is our college bucket list we made together,0.079417035
+33,,115.82,119.46,this is me at work at my current part time job,0.08187978
+34,,119.46,120.73,i work as tutor,0.09436975
+35,,120.73,124.73,and due to the pandemic i tutor using zoom,0.085388675
+36,,124.73,128.12,self confidence is my biggest struggle right now,0.07442757
+37,,128.12,131.96,and even though i've made significant progress compared to the past,0.073229544
+38,,131.96,134.2,i've still got a long way to go,0.06849405
+39,,134.2,139.96,progress isn't always linear but i know that i have it within me to eventually make it to where i want to be,0.09475418
+40,,139.96,144.29999899999999,and that's actually the mindset i have for pretty much everything in my life,0.07855862
+41,,144.29999899999999,147.53,i might not have all the answers or all the skills right now,0.08518047
+42,,147.53,149.91,but i trust that with hard work and dedication,0.08650615
+43,,149.91,154.07,i will figure it out along the way as i always have,0.065323114
+44,,154.07,163.88,no one starts off as an expert but the only way to improve is to work hard and believe you can do it and finally this was my senior quote in the yearbook,0.079143055
+45,,163.88,168.72,maybe it was cheesy but i think it summed up my high school experience really well,0.10028418
+46,,168.72,172.429999,and that quote continues to capture the essence of my goals,0.085804835
+47,,172.429999,178.17000000000004,i'm extremely ambitious and i can't wait to see where i'll be in another couple of years from now,0.07905453
+48,,178.17000000000004,183.05,i have big dreams for the future and i'm so excited to work towards them,0.06901808
+49,,183.05,187.46,and i've got the next four years to do just that,0.05669803
+50,,187.46,189.57,here's to college and beyond,0.088001974
+51,NON-SPEECH,189.57,195.0,NON-SPEECH,0.020524157
