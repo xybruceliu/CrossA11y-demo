@@ -1,0 +1,42 @@
+audio_seg_id,subject,start,end,raw_subject,silence_detection
+0,hello,0.34,1.37,hello,0.08042077
+1,everyone 'm apartment,1.37,4.92,everyone i'm in my apartment,0.06594197
+2,n't believe 'm saying 's clearly mess everywhere,4.92,10.01,i can't believe i'm saying that it's clearly a mess everywhere from here,0.055883657
+3,big giant storage room,10.01,12.7,you have this big giant storage room,0.055426586
+4,store many things shoe rack favorite part apartment kitchen cutest thing 's like,12.7,20.94,you can store so many things and we have a shoe rack in here this is my favorite part of the apartment our kitchen is the cutest thing it's like this,0.071659364
+5,like kind bar type like kitchen,20.94,24.8,like kind of bar type of like kitchen,0.08065863
+6,'s cozy would definitely say,24.8,27.84,it's very cozy i would definitely say we have so,0.08208473
+7,much cabinet space,27.84,30.11,much cabinet space,0.047503274
+8,everywhere,30.11,31.98,everywhere and then,0.07283009
+9,'s dish rack,31.98,33.86,here's our dish rack,0.07662338
+10,freezer fridge stove oven microwave gigantic living room area two bedrooms,33.86,44.12,our freezer and fridge stove oven and microwave and then this is our gigantic living room area we have two bedrooms,0.084718674
+11,right across kitchen area 's storage,44.12,49.59,so right across from this kitchen area there's some storage here,0.07356013
+12,tara 's 's bathroom,49.59,53.969999,but also is tara's and mine's bathroom,0.085652605
+13,hi eucalyptus plant right hangs shower,53.969999,59.24,hi we have a eucalyptus plant right now that just hangs there as we shower,0.078512885
+14,'s bedroom 's light grab lights,59.24,65.71000000000001,and here's our bedroom there's no light at all so we grab some lights,0.086982034
+15,messy,65.71000000000001,66.66999999999999,very messy,0.11256724
+16,,66.66999999999999,74.29999999999998,NON-SPEECH,0.031203374
+17,'s finished results took,74.29999999999998,76.52,here's our finished results it took,0.058231235
+18,much blood sweat tears heading target right,76.52,81.11,so much blood sweat and tears heading to target right now,0.1261834
+19,command strips,81.11,83.389999,because our command strips,0.1502368
+20,failing us need command strips 'm going pick,83.389999,87.19,are failing on us so we need more command strips and then i'm going to pick up a few,0.16227147
+21,,87.19,118.139999,NON-SPEECH,0.07611788
+22,things nothing moving related,118.139999,121.059999,things nothing moving related but,0.08810494
+23,'m,121.059999,123.29,because i'm here,0.05555966
+24,jaywalk close hulu office santa monica,123.29,129.74,should i just jaywalk i am very close to the hulu office in santa monica,0.062563874
+25,'m going head office picture,129.74,137.04,so i'm going to head to their office and take a picture,0.10968105
+26,oh,137.04,139.559999,oh no,0.13724458
+27,pokey place wanted go closed,139.559999,141.99,the pokey place i wanted to go to is closed,0.15004353
+28,,141.99,151.71,NON-SPEECH,0.078049585
+29,finished last meeting,151.71,154.57,i just finished my last meeting,0.04613121
+30,hulu,154.57,156.37,at hulu,0.032324027
+31,'m pretty much officially done terms meeting wise mean choose like stay like read definitely 's lot documents n't get access leave 'm like,156.37,167.75,i'm pretty much officially done in terms of meeting wise i mean i can choose to like stay on and like read more which i definitely will because there's a lot of documents i can't get access to after i leave i'm like,0.05290127
+32,hate goodbyes guys like get super duper emotional get,167.75,172.9,i hate goodbyes you guys like i get super duper emotional and i get,0.047980826
+33,hate saying goodbyes hate closing book like moving like new things 's like always super sentimental,172.9,181.40999900000003,i hate saying goodbyes i hate closing the book and like moving on to like new things because it's like always super sentimental for me,0.03927725
+34,yeah,181.40999900000003,181.68999900000003,yeah,0.024627816
+35,,181.68999900000003,186.539999,NON-SPEECH,0.08759498
+36,,186.539999,186.729999,so,0.15596037
+37,,186.729999,198.34,NON-SPEECH,0.10245931
+38,let 's suppose able every night dream dream wanted dream,198.34,205.07,let's suppose that you were able every night to dream any dream you wanted to dream,0.07269121
+39,let 's let 's surprise,205.07,208.44,but now let's um let's have a surprise,0.074028574
+40,let 's dream,208.44,209.14,let's have a dream,0.07649491
